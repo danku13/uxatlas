@@ -1,0 +1,81 @@
+// Prisma schema — Mobile UX Patterns Portal (Variant A: problem-first)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// 10 drop-off points (categories)
+model Category {
+  id          String    @id @default(cuid())
+  slug        String    @unique // onboarding, authentication, ...
+  name        String
+  description String?
+  icon        String? // lucide icon name
+  accent      String? // tailwind color token for accent (e.g. "amber", "rose")
+  order       Int       @default(0)
+  patterns    Pattern[]
+}
+
+model Pattern {
+  id               String   @id @default(cuid())
+  slug             String   @unique
+  title            String
+  summary         String
+  description     String
+  problemStatement String // why users drop off here
+  solution         String // how this pattern addresses it
+  pros            String // JSON-encoded string[] (sqlite limitation)
+  cons             String // JSON-encoded string[]
+  useCases         String // JSON-encoded string[]
+  mockupType       String // key to choose interactive mockup component
+  mockupConfig     String // JSON-encoded config object
+  platforms        String // JSON-encoded string[] e.g. ["ios","android"]
+  severity         String   @default("medium") // high | medium | low — drop-off risk
+  authorName       String   @default("Community")
+  published        Boolean  @default(true)
+  moderationStatus String   @default("approved") // pending | approved | rejected
+  categoryId       String
+  category         Category @relation(fields: [categoryId], references: [id])
+  tags             PatternTag[]
+  guidelines       Guideline[]
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([categoryId])
+  @@index([moderationStatus])
+  @@index([published])
+}
+
+model Tag {
+  id       String       @id @default(cuid())
+  slug     String       @unique
+  name     String
+  patterns PatternTag[]
+}
+
+model PatternTag {
+  patternId String
+  tagId     String
+  pattern   Pattern @relation(fields: [patternId], references: [id], onDelete: Cascade)
+  tag       Tag     @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([patternId, tagId])
+}
+
+// Design principles / guidelines as hints (Material, HIG, Nielsen, etc.)
+model Guideline {
+  id        String   @id @default(cuid())
+  title     String
+  body      String
+  source    String // material | hig | nielsen | custom
+  patternId String
+  pattern   Pattern @relation(fields: [patternId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@index([patternId])
+}
