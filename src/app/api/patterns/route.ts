@@ -13,7 +13,9 @@ import type { Paginated, PatternDTO } from "@/lib/types";
 // Reads from /content/ Markdown files. No database needed — works on Vercel.
 // ---------------------------------------------------------------------------
 
-export const dynamic = "force-static";
+// This route handles query params (page, pageSize, q, severity, etc.) so it
+// must remain dynamic. Don't add `force-static` here — it would break query
+// parsing on Vercel.
 
 const SEVERITIES = ["high", "medium", "low"] as const;
 const PLATFORMS = ["ios", "android"] as const;

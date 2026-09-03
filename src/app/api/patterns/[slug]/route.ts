@@ -8,7 +8,7 @@ interface RouteContext {
 // GET /api/patterns/[slug]
 // Returns a single published + approved pattern by slug, including its
 // category, tags, and guidelines. Reads from /content/ — no DB needed.
-export const dynamic = "force-static";
+// Note: no `force-static` here — dynamic [slug] param needs runtime evaluation.
 
 export async function GET(_req: Request, ctx: RouteContext): Promise<Response> {
   try {
