@@ -1,38 +1,14 @@
 import { NextResponse } from "next/server";
-import { db } from "@/lib/db";
-import type { TagDTO } from "@/lib/types";
+import { getTagsDTO } from "@/lib/content";
 
 // GET /api/tags
 // Returns all tags ordered by name, each with the count of approved +
-// published patterns that use it.
+// published patterns that use it. Reads from /content/ — no DB needed.
+export const dynamic = "force-static";
+
 export async function GET(): Promise<Response> {
   try {
-    const tags = await db.tag.findMany({
-      orderBy: { name: "asc" },
-      include: {
-        _count: {
-          select: {
-            patterns: {
-              where: {
-                pattern: {
-                  published: true,
-                  moderationStatus: "approved",
-                },
-              },
-            },
-          },
-        },
-      },
-    });
-
-    const out: TagDTO[] = tags.map((t) => ({
-      id: t.id,
-      slug: t.slug,
-      name: t.name,
-      patternCount: t._count.patterns,
-    }));
-
-    return NextResponse.json(out);
+    return NextResponse.json(getTagsDTO());
   } catch (err) {
     console.error("[GET /api/tags] failed:", err);
     return NextResponse.json(

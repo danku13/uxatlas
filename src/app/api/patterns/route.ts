@@ -1,27 +1,32 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { db } from "@/lib/db";
 import {
-  type Paginated,
-  type PatternDTO,
-  type Severity,
-  type GuidelineSource,
-  SEVERITY_RANK,
-  ensureUniqueSlug,
+  getPatterns,
   toPatternDTO,
-} from "@/lib/types";
+  type Pattern,
+  type Severity,
+} from "@/lib/content";
+import type { Paginated, PatternDTO } from "@/lib/types";
 
 // ---------------------------------------------------------------------------
 // GET /api/patterns — list with filter / search / pagination / sort
+// Reads from /content/ Markdown files. No database needed — works on Vercel.
 // ---------------------------------------------------------------------------
+
+export const dynamic = "force-static";
 
 const SEVERITIES = ["high", "medium", "low"] as const;
 const PLATFORMS = ["ios", "android"] as const;
 const SORTS = ["newest", "severity"] as const;
 
+const SEVERITY_RANK: Record<Severity, number> = {
+  high: 0,
+  medium: 1,
+  low: 2,
+};
+
 type ListQuery = {
   q?: string;
-  categoryId?: string;
   categorySlug?: string;
   severity?: string[];
   platform?: (typeof PLATFORMS)[number];
@@ -59,13 +64,13 @@ function parseListQuery(url: URL): ListQuery {
     : undefined;
 
   const sortRaw = sp.get("sort")?.toLowerCase();
-  const sort = sortRaw && (SORTS as readonly string[]).includes(sortRaw)
-    ? (sortRaw as (typeof SORTS)[number])
-    : "newest";
+  const sort =
+    sortRaw && (SORTS as readonly string[]).includes(sortRaw)
+      ? (sortRaw as (typeof SORTS)[number])
+      : "newest";
 
   return {
     q: sp.get("q")?.trim() || undefined,
-    categoryId: sp.get("categoryId")?.trim() || undefined,
     categorySlug: sp.get("categorySlug")?.trim() || undefined,
     severity: severity && severity.length > 0 ? severity : undefined,
     platform,
@@ -76,118 +81,45 @@ function parseListQuery(url: URL): ListQuery {
   };
 }
 
+function matchesFilters(p: Pattern, q: ListQuery): boolean {
+  if (!p.published || p.moderationStatus !== "approved") return false;
+  if (q.categorySlug && p.categorySlug !== q.categorySlug) return false;
+  if (q.severity && !q.severity.includes(p.severity)) return false;
+  if (q.platform && !p.platforms.includes(q.platform)) return false;
+  if (q.tag && !p.tagSlugs.includes(q.tag)) return false;
+  if (q.q) {
+    const needle = q.q.toLowerCase();
+    const haystack = [p.title, p.summary, p.description, p.problemStatement]
+      .join(" ")
+      .toLowerCase();
+    if (!haystack.includes(needle)) return false;
+  }
+  return true;
+}
+
 export async function GET(req: Request): Promise<Response> {
   try {
     const q = parseListQuery(new URL(req.url));
+    const all = getPatterns();
 
-    // Resolve categorySlug → categoryId so we can filter by id directly.
-    let categoryIdFilter: string | undefined = q.categoryId;
-    if (!categoryIdFilter && q.categorySlug) {
-      const cat = await db.category.findUnique({
-        where: { slug: q.categorySlug },
-        select: { id: true },
-      });
-      if (!cat) {
-        return NextResponse.json(
-          {
-            items: [],
-            total: 0,
-            page: q.page,
-            pageSize: q.pageSize,
-            totalPages: 0,
-          },
-          { status: 200 },
-        );
-      }
-      categoryIdFilter = cat.id;
-    }
-
-    // Resolve tag slug → tag id for the relation filter.
-    let tagIdFilter: string | undefined;
-    if (q.tag) {
-      const tag = await db.tag.findUnique({
-        where: { slug: q.tag },
-        select: { id: true },
-      });
-      if (!tag) {
-        return NextResponse.json(
-          {
-            items: [],
-            total: 0,
-            page: q.page,
-            pageSize: q.pageSize,
-            totalPages: 0,
-          },
-          { status: 200 },
-        );
-      }
-      tagIdFilter = tag.id;
-    }
-
-    const where = {
-      published: true,
-      moderationStatus: "approved" as const,
-      ...(categoryIdFilter ? { categoryId: categoryIdFilter } : {}),
-      ...(q.severity ? { severity: { in: q.severity } } : {}),
-      ...(q.platform
-        ? // SQLite stores platforms as a JSON-encoded string like '["ios","android"]'.
-          // A substring search for '"ios"' / '"android"' matches safely.
-          { platforms: { contains: `"${q.platform}"` } }
-        : {}),
-      ...(q.q
-        ? {
-            OR: [
-              { title: { contains: q.q } },
-              { summary: { contains: q.q } },
-              { description: { contains: q.q } },
-              { problemStatement: { contains: q.q } },
-            ],
-          }
-        : {}),
-      ...(tagIdFilter
-        ? { tags: { some: { tagId: tagIdFilter } } }
-        : {}),
-    };
-
-    const total = await db.pattern.count({ where });
+    const filtered = all.filter((p) => matchesFilters(p, q));
+    const total = filtered.length;
     const totalPages = Math.max(1, Math.ceil(total / q.pageSize));
 
-    let items: PatternDTO[];
-
-    if (q.sort === "severity") {
-      // Fetch everything that matches (catalog is small), sort in JS by
-      // severity rank (high → medium → low), then by createdAt desc as a
-      // stable tiebreaker, then paginate the slice.
-      const all = await db.pattern.findMany({
-        where,
-        include: {
-          category: true,
-          tags: { include: { tag: true } },
-        },
-        orderBy: { createdAt: "desc" },
-      });
-      const sorted = all.sort((a, b) => {
+    // Sort
+    const sorted = [...filtered].sort((a, b) => {
+      if (q.sort === "severity") {
         const sa = SEVERITY_RANK[a.severity] ?? 99;
         const sb = SEVERITY_RANK[b.severity] ?? 99;
         if (sa !== sb) return sa - sb;
-        return b.createdAt.getTime() - a.createdAt.getTime();
-      });
-      const start = (q.page - 1) * q.pageSize;
-      const slice = sorted.slice(start, start + q.pageSize);
-      items = slice.map(toPatternDTO);
-    } else {
-      const rows = await db.pattern.findMany({
-        where,
-        include: {
-          category: true,
-          tags: { include: { tag: true } },
-        },
-        orderBy: { createdAt: "desc" },
-        skip: (q.page - 1) * q.pageSize,
-        take: q.pageSize,
-      });
-      items = rows.map(toPatternDTO);
-    }
+      }
+      // Stable tiebreaker: slug alphabetical (deterministic, no time-based)
+      return a.slug.localeCompare(b.slug);
+    });
+
+    const start = (q.page - 1) * q.pageSize;
+    const slice = sorted.slice(start, start + q.pageSize);
+    const items: PatternDTO[] = slice.map(toPatternDTO);
 
     const body: Paginated<PatternDTO> = {
       items,
@@ -208,6 +140,8 @@ export async function GET(req: Request): Promise<Response> {
 
 // ---------------------------------------------------------------------------
 // POST /api/patterns — public submission (pending moderation)
+// On Vercel/serverless without DB, returns 503 Service Unavailable
+// (submissions need a persistent storage; reads work via /content/)
 // ---------------------------------------------------------------------------
 
 const guidelineInputSchema = z.object({
@@ -268,11 +202,10 @@ export async function POST(req: Request): Promise<Response> {
   }
 
   try {
-    // Resolve category by slug — must exist.
-    const category = await db.category.findUnique({
-      where: { slug: parsed.categorySlug },
-      select: { id: true },
-    });
+    // Validate that the category exists in /content/
+    const { getCategories } = await import("@/lib/content");
+    const categories = getCategories();
+    const category = categories.find((c) => c.slug === parsed.categorySlug);
     if (!category) {
       return NextResponse.json(
         {
@@ -288,29 +221,20 @@ export async function POST(req: Request): Promise<Response> {
       );
     }
 
-    // Resolve any provided tag slugs — all must exist.
-    const tagSlugs = parsed.tagSlugs ?? [];
-    const tags: { id: string }[] =
-      tagSlugs.length > 0
-        ? await db.tag.findMany({
-            where: { slug: { in: tagSlugs } },
-            select: { id: true },
-          })
-        : [];
-    if (tagSlugs.length > 0 && tags.length !== tagSlugs.length) {
-      const foundSlugs = await db.tag.findMany({
-        where: { slug: { in: tagSlugs } },
-        select: { slug: true },
-      });
-      const foundSet = new Set(foundSlugs.map((t) => t.slug));
-      const missing = tagSlugs.filter((s) => !foundSet.has(s));
+    // Validate tag slugs
+    const { getTags } = await import("@/lib/content");
+    const tags = getTags();
+    const unknownTags = (parsed.tagSlugs ?? []).filter(
+      (slug) => !tags.some((t) => t.slug === slug),
+    );
+    if (unknownTags.length > 0) {
       return NextResponse.json(
         {
           error: "Validation failed",
           details: [
             {
               path: "tagSlugs",
-              message: `Unknown tag slug(s): ${missing.join(", ")}`,
+              message: `Unknown tag slug(s): ${unknownTags.join(", ")}`,
             },
           ],
         },
@@ -318,63 +242,24 @@ export async function POST(req: Request): Promise<Response> {
       );
     }
 
-    // Generate a unique slug from the title.
-    const slug = await ensureUniqueSlug(parsed.title, async (candidate) => {
-      const existing = await db.pattern.findUnique({
-        where: { slug: candidate },
-        select: { id: true },
-      });
-      return Boolean(existing);
-    });
-
-    const created = await db.$transaction(async (tx) => {
-      const pattern = await tx.pattern.create({
-        data: {
-          slug,
+    // On serverless without persistent storage, submissions can't be saved.
+    // Return 503 with a clear message. (For production, hook up a real DB or
+    // a service like Formspree/Sentry to capture submissions.)
+    return NextResponse.json(
+      {
+        error:
+          "Submissions are not available on this deployment. To enable pattern submissions, configure a database (see README).",
+        received: {
           title: parsed.title,
-          summary: parsed.summary,
-          description: parsed.description,
-          problemStatement: parsed.problemStatement,
-          solution: parsed.solution,
-          pros: JSON.stringify(parsed.pros ?? []),
-          cons: JSON.stringify(parsed.cons ?? []),
-          useCases: JSON.stringify(parsed.useCases ?? []),
-          mockupType: parsed.mockupType,
-          mockupConfig: JSON.stringify(parsed.mockupConfig ?? {}),
-          platforms: JSON.stringify(parsed.platforms),
-          severity: parsed.severity as Severity,
-          authorName: parsed.authorName,
-          // New community submissions start pending + unpublished.
-          published: false,
-          moderationStatus: "pending",
-          categoryId: category.id,
-          tags: tags.length
-            ? {
-                create: tags.map((t) => ({ tagId: t.id })),
-              }
-            : undefined,
-          guidelines: parsed.guidelines?.length
-            ? {
-                create: parsed.guidelines.map((g) => ({
-                  title: g.title,
-                  body: g.body,
-                  source: g.source as GuidelineSource,
-                })),
-              }
-            : undefined,
+          slug: parsed.title
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, "-")
+            .replace(/^-+|-+$/g, ""),
+          category: parsed.categorySlug,
         },
-        include: {
-          category: true,
-          tags: { include: { tag: true } },
-          guidelines: true,
-        },
-      });
-      return pattern;
-    });
-
-    // Return the full DTO of the created pattern (201 Created).
-    const dto = toPatternDTO(created);
-    return NextResponse.json(dto, { status: 201 });
+      },
+      { status: 503 },
+    );
   } catch (err) {
     console.error("[POST /api/patterns] failed:", err);
     return NextResponse.json(

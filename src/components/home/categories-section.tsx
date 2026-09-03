@@ -99,22 +99,13 @@ function getAccent(token: string | null): AccentClasses {
 
 /* -------------------------------------------------------------------------- */
 /*  Data fetching                                                             */
+/*  Reads directly from /content/ Markdown files via lib/content — no DB,     */
+/*  no HTTP fetch. Works on Vercel, serverless, anywhere.                     */
 /* -------------------------------------------------------------------------- */
 async function fetchCategories(): Promise<Category[]> {
-  const base =
-    process.env.NEXT_PUBLIC_APP_URL ??
-    'http://localhost:3000';
   try {
-    const res = await fetch(`${base}/api/categories`, {
-      cache: 'no-store',
-    });
-    if (!res.ok) return [];
-    const data = (await res.json()) as Category[] | { items: Category[] };
-    if (Array.isArray(data)) return data;
-    if (data && Array.isArray((data as { items?: Category[] }).items)) {
-      return (data as { items: Category[] }).items;
-    }
-    return [];
+    const { getCategoriesDTO } = await import('@/lib/content');
+    return getCategoriesDTO();
   } catch {
     return [];
   }

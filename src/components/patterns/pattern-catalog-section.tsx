@@ -14,16 +14,14 @@ import { PatternCatalogClient } from './pattern-catalog-client';
  * accurate as the catalog grows.
  */
 export async function PatternCatalogSection() {
+  // Read count directly from /content/ Markdown files — no DB, no fetch.
+  // Works on Vercel, serverless, anywhere.
   let totalPatterns = 31; // sensible fallback
   try {
-    const res = await fetch(
-      'http://127.0.0.1:3000/api/patterns?pageSize=1',
-      { cache: 'no-store' },
-    );
-    if (res.ok) {
-      const data = await res.json();
-      totalPatterns = data?.total ?? totalPatterns;
-    }
+    const { getPatterns } = await import('@/lib/content');
+    totalPatterns = getPatterns().filter(
+      (p) => p.published && p.moderationStatus === 'approved',
+    ).length;
   } catch {
     // ignore — use fallback
   }

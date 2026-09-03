@@ -37,23 +37,17 @@ function PhonePlaceholder({
 }
 
 export async function HeroSection() {
-  // Fetch live counts so the stats stay accurate as the catalog grows.
+  // Read counts directly from /content/ Markdown files — no DB, no fetch.
+  // Works on Vercel, serverless, anywhere.
   let patternCount = 31;
   let categoryCount = 10;
   let guidelineCount = 60;
   try {
-    const [patternsRes, categoriesRes] = await Promise.all([
-      fetch('http://127.0.0.1:3000/api/patterns?pageSize=1', { cache: 'no-store' }),
-      fetch('http://127.0.0.1:3000/api/categories', { cache: 'no-store' }),
-    ]);
-    if (patternsRes.ok) {
-      const data = await patternsRes.json();
-      patternCount = data?.total ?? patternCount;
-    }
-    if (categoriesRes.ok) {
-      const data = await categoriesRes.json();
-      categoryCount = Array.isArray(data) ? data.length : categoryCount;
-    }
+    const { getPatterns, getCategories } = await import("@/lib/content");
+    const patterns = getPatterns();
+    const categories = getCategories();
+    patternCount = patterns.length;
+    categoryCount = categories.length;
     // Approx guidelines: ~2 per pattern on average → round up
     guidelineCount = Math.ceil(patternCount * 1.9);
   } catch {
