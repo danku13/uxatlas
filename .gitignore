@@ -79,3 +79,13 @@ Thumbs.db
 /upload/
 /examples/
 /tests/
+
+# Research artifacts (web search results — not part of source)
+/research/
+
+# Dev server runtime artifacts
+/.zscripts/
+*.pid
+
+# Mini-services placeholder (not used in this project)
+/mini-services/

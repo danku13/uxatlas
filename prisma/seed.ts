@@ -1403,6 +1403,1785 @@ const patterns: PatternSeed[] = [
       },
     ],
   },
+
+  // ============================================================
+  // BATCH 2 — 25 patterns from web research (NN/g, Material, HIG, Mobbin, Baymard)
+  // ============================================================
+
+  // ===== PERSONALIZATION SURVEY (onboarding) =====
+  {
+    slug: "personalization-survey",
+    title: "Personalization survey onboarding",
+    summary:
+      "Короткий опрос из 3-5 вопросов во время онбординга — подстраивает контент под пользователя.",
+    description:
+      "Карточки с чипсами-вариантами: «Ваша цель?», «Что интересует?», «Уровень?». Каждый ответ фильтрует последующий опыт. Babbel, Duolingo, MyFitnessPal используют.",
+    problemStatement:
+      "Общий онбординг не учитывает контекст пользователя. Без персонализации 60% бросают приложение в первую неделю.",
+    solution:
+      "3-5 коротких вопросов с чипсами — приложение сразу подстраивается под ответы.",
+    pros: [
+      "Персонализация с первого экрана",
+      "Повышает retention на 30-50%",
+      "Данные для сегментации",
+    ],
+    cons: ["Дополнительные шаги в онбординге", "Нужно показать ценность ответов"],
+    useCases: ["Fitness/health", "Образование", "Контентные приложения", "E-commerce с фильтрами"],
+    mockupType: "personalization-survey",
+    mockupConfig: {
+      questions: [
+        {
+          title: "Какая ваша цель?",
+          options: ["Снизить вес", "Набрать массу", "Поддерживать форму", "Улучшить сон"],
+        },
+        {
+          title: "Уровень активности?",
+          options: ["Сидячий", "Лёгкая", "Умеренная", "Высокая"],
+        },
+      ],
+    },
+    platforms: ["ios", "android"],
+    severity: "medium",
+    authorName: "Babbel / Duolingo",
+    categorySlug: "onboarding",
+    tagSlugs: ["friction-reduction", "clarity", "cross-platform"],
+    guidelines: [
+      {
+        title: "Questions that change the product",
+        body: "Only ask questions whose answers actually change the user's experience. Vanity questions waste user time.",
+        source: "nielsen",
+      },
+      {
+        title: "Maximum 5 questions",
+        body: "Users tolerate 3-5 questions. Beyond that, abandonment spikes. Each question must have a visible benefit.",
+        source: "nielsen",
+      },
+    ],
+  },
+
+  // ===== FEATURE TOUR OVERLAY (onboarding) =====
+  {
+    slug: "feature-tour-overlay",
+    title: "Feature tour overlay",
+    summary:
+      "Полупрозрачный overlay с подсветкой 3-5 ключевых функций после первого входа.",
+    description:
+      "После первого запуска — overlay с затемнённым фоном и подсветкой первой ключевой функции. Tooltip с описанием + «Далее». После 3-5 подсказок — «Готово начать».",
+    problemStatement:
+      "Пользователь видит сложный интерфейс и не понимает с чего начать. 40% abandon в первые 30 секунд из-за перегруза.",
+    solution: "Подсвечиваем 3-5 ключевых функций в логическом порядке.",
+    pros: ["Обучает в контексте", "Снижает time-to-value", "Не прерывает надолго"],
+    cons: ["Может раздражать опытных", "Нужна аналитика для skip-логики"],
+    useCases: ["B2B SaaS", "Сложные приложения", "Обновления с новыми фичами"],
+    mockupType: "feature-tour-overlay",
+    mockupConfig: {
+      steps: [
+        { target: "search", title: "Поиск", body: "Найдите любой товар за секунды" },
+        { target: "filter", title: "Фильтры", body: "Уточните категорию и цену" },
+        { target: "cart", title: "Корзина", body: "Добавляйте товары и оформляйте" },
+      ],
+    },
+    platforms: ["ios", "android"],
+    severity: "medium",
+    authorName: "Linear / Notion",
+    categorySlug: "onboarding",
+    tagSlugs: ["high-dropoff", "clarity", "progressive-disclosure", "cross-platform"],
+    guidelines: [
+      {
+        title: "Tour maximum 5 steps",
+        body: "Beyond 5 steps, users lose patience. Pick the 3-5 most critical actions and stop.",
+        source: "nielsen",
+      },
+      {
+        title: "Allow skip always",
+        body: "Power users hate tours. Always allow skipping — they'll explore on their own.",
+        source: "hig",
+      },
+    ],
+  },
+
+  // ===== TIME TO VALUE PROGRESS (onboarding) =====
+  {
+    slug: "time-to-value-progress",
+    title: "Time-to-value progress indicator",
+    summary:
+      "Прогресс до первого значимого действия: «2 из 3 шагов до первого заказа».",
+    description:
+      "Во время setup показываем прогресс до первого value: заполните профиль → добавьте адрес → сделайте первый заказ. Каждый шаг — это движение к цели, не к завершению setup.",
+    problemStatement:
+      "Setup выглядит как «ещё 5 полей до конца» — пользователь бросает, не видя ценности впереди.",
+    solution:
+      "Прогресс ведёт к value (первый заказ), а не к завершению формы. Психологически легче продолжать.",
+    pros: ["Фокус на ценности", "Снижает setup abandonment", "Обучает последовательности действий"],
+    cons: ["Нужно понимать что для пользователя — value"],
+    useCases: ["SaaS onboarding", "Банковские приложения", "Marketplace с профилем"],
+    mockupType: "time-to-value-progress",
+    mockupConfig: {
+      goal: "Первый заказ",
+      steps: [
+        { title: "Создайте профиль", done: true },
+        { title: "Добавьте адрес доставки", done: true },
+        { title: "Выберите товар", done: false },
+      ],
+    },
+    platforms: ["ios", "android"],
+    severity: "medium",
+    authorName: "Stripe / Linear",
+    categorySlug: "onboarding",
+    tagSlugs: ["high-dropoff", "friction-reduction", "progressive-disclosure", "cross-platform"],
+    guidelines: [
+      {
+        title: "Lead to value, not completion",
+        body: "Progress bars should lead to the user's first real value (first order, first message), not to form completion. That's what motivates.",
+        source: "nielsen",
+      },
+    ],
+  },
+
+  // ===== PASSKEY AUTH (authentication) =====
+  {
+    slug: "passkey-auth",
+    title: "Passkey / WebAuthn authentication",
+    summary:
+      "Вход через passkey — безпарольная аутентификация с криптографией устройства. Безопаснее пароля, удобнее.",
+    description:
+      "Passkey хранится в Apple Keychain / Google Password Manager. Вход — одно касание Face ID/Touch ID. Нет пароля = нет фишинга = нет утечек.",
+    problemStatement:
+      "Пароли — главная причина account takeover. 80% нарушений связаны со слабыми/украденными паролями. Пользователи их забывают и не могут войти.",
+    solution:
+      "Passkey заменяет пароль криптографической парой. Пользователь не вводит ничего — аутентификация через биометрию устройства.",
+    pros: [
+      "Нет фишинга (passkey привязан к домену)",
+      "Нет утечек (нет базы паролей)",
+      "Вход за 1 секунду",
+      "Синхронизируется между устройствами",
+    ],
+    cons: ["Не все платформы поддерживают", "Нужен fallback"],
+    useCases: ["Banking", "E-commerce", "Любое приложение с аккаунтами"],
+    mockupType: "passkey-auth",
+    mockupConfig: {
+      appName: "UX Shop",
+      lastLogin: "Последний вход вчера",
+    },
+    platforms: ["ios", "android"],
+    severity: "medium",
+    authorName: "Apple / Google",
+    categorySlug: "authentication",
+    tagSlugs: ["friction-reduction", "ios", "android", "error-prone"],
+    guidelines: [
+      {
+        title: "Offer passkey as default option",
+        body: "Passkeys are more secure and convenient than passwords. Offer them as the primary authentication method when available.",
+        source: "hig",
+      },
+      {
+        title: "Always provide password fallback",
+        body: "Not all users/devices support passkeys yet. Always provide password fallback to avoid lockout.",
+        source: "nielsen",
+      },
+    ],
+  },
+
+  // ===== ACCOUNT RECOVERY (authentication) =====
+  {
+    slug: "account-recovery",
+    title: "Account recovery flow",
+    summary:
+      "Понятный flow восстановления доступа: выбор метода (email/SMS/backup), подтверждение, новый пароль.",
+    description:
+      "«Забыли пароль?» → выбор метода восстановления (email или SMS) → ввод кода → новый пароль с inline validation. Никаких_CAPTCHA и секретных вопросов.",
+    problemStatement:
+      "50% пользователей не могут восстановить пароль с первой попытки. Сложные recovery flows = потерянные аккаунты = churn.",
+    solution: "Простой 3-шаговый flow с выбором метода и inline feedback.",
+    pros: [
+      "Снижает support-тикеты на 40%",
+      "Восстанавливает аккаунт за 30 секунд",
+      "Гибкий выбор метода",
+    ],
+    cons: ["Нужен secure канал восстановления", "SMS уязвим к SIM-swap"],
+    useCases: ["Любое приложение с аккаунтами", "Banking", "SaaS"],
+    mockupType: "account-recovery",
+    mockupConfig: {
+      methods: [
+        { id: "email", label: "Email", value: "anna@example.com" },
+        { id: "sms", label: "SMS", value: "+7 (916) ••• 45-67" },
+      ],
+    },
+    platforms: ["ios", "android"],
+    severity: "high",
+    authorName: "Google / GitHub",
+    categorySlug: "authentication",
+    tagSlugs: ["high-dropoff", "friction-reduction", "cross-platform"],
+    guidelines: [
+      {
+        title: "Recovery should match signup method",
+        body: "If signup was via email, recovery should prefer email. Don't force SMS if user never gave their phone.",
+        source: "nielsen",
+      },
+      {
+        title: "No CAPTCHA in recovery",
+        body: "CAPTCHA in recovery flow spikes abandonment. Use risk-based signals instead (device, location, behavior).",
+        source: "nielsen",
+      },
+    ],
+  },
+
+  // ===== RECENT + TRENDING TABS (search-discovery) =====
+  {
+    slug: "recent-trending-tabs",
+    title: "Recent + Trending tabs in search",
+    summary:
+      "В пустом поиске — 2 таба: Недавние запросы и Популярные сейчас.",
+    description:
+      "При тапе на search bar без ввода — экран с двумя табами: «Недавние» (история запросов пользователя) и «В тренде» (популярные запросы прямо сейчас).",
+    problemStatement:
+      "Пустой search вводит в ступор. Пользователь не знает что искать. 30% закрывают на этом этапе.",
+    solution: "Предлагаем готовые варианты — недавние и популярные.",
+    pros: ["Снижает friction в начале поиска", "Обучает формату запросов", "Персонализация через историю"],
+    cons: ["Нужна инфраструктура trending queries"],
+    useCases: ["E-commerce", "Контентные приложения", "Соцсети"],
+    mockupType: "recent-trending-tabs",
+    mockupConfig: {
+      recent: ["Кроссовки Nike", "iPhone 15", "Кофемашина"],
+      trending: ["Зимние куртки", "AirPods Pro 2", "Игрушки для детей", "Умные часы"],
+    },
+    platforms: ["ios", "android"],
+    severity: "low",
+    authorName: "Amazon / Wildberries",
+    categorySlug: "search-discovery",
+    tagSlugs: ["clarity", "friction-reduction", "cross-platform"],
+    guidelines: [
+      {
+        title: "Surface trending and recent in empty search",
+        body: "Don't show a blank search box. Suggest recent queries and trending searches to reduce friction.",
+        source: "nielsen",
+      },
+    ],
+  },
+
+  // ===== VOICE SEARCH (search-discovery) =====
+  {
+    slug: "voice-search",
+    title: "Voice search",
+    summary:
+      "Голосовой ввод запроса — иконка микрофона в search bar.",
+    description:
+      "Иконка микрофона в search bar. Тап → системный voice input → распознанный текст вставляется в search → результаты. Полезно на ходу, в машине, при длинных запросах.",
+    problemStatement:
+      "Печатать на мобильном сложно — длинные запросы раздражают. На ходу или за рулём печатать невозможно.",
+    solution: "Voice input — говорим запрос, получаем результаты.",
+    pros: [
+      "Удобно на ходу",
+      "Поддерживает естественные запросы",
+      "Доступность для людей с моторными ограничениями",
+    ],
+    cons: ["Шумная среда мешает", "Не всегда точно распознаёт", "Нужен fallback на текст"],
+    useCases: ["E-commerce", "Карты и навигация", "Музыка", "Заметки"],
+    mockupType: "voice-search",
+    mockupConfig: {
+      placeholder: "Скажите что искать...",
+      exampleQuery: "красные кроссовки 42 размера",
+    },
+    platforms: ["ios", "android"],
+    severity: "low",
+    authorName: "Apple Siri / Google Assistant",
+    categorySlug: "search-discovery",
+    tagSlugs: ["friction-reduction", "clarity", "ios", "android"],
+    guidelines: [
+      {
+        title: "Voice input button next to search",
+        body: "Place voice input icon inside or next to the search bar. Discoverable, not hidden in a menu.",
+        source: "hig",
+      },
+      {
+        title: "Always allow text edit after voice",
+        body: "Voice recognition isn't perfect. Always let users edit the transcribed text before search.",
+        source: "material",
+      },
+    ],
+  },
+
+  // ===== CONDITIONAL FIELDS (forms-input) =====
+  {
+    slug: "conditional-fields",
+    title: "Conditional fields (progressive disclosure)",
+    summary:
+      "Поля появляются только при необходимости: выбрал «доставка курьером» → появилось поле адреса.",
+    description:
+      "Изначально показываем минимум полей. При выборе опции появляются релевантные: «Самовывоз» → адрес магазина; «Курьер» → адрес доставки; «Почта» → индекс и отделение.",
+    problemStatement:
+      "Формы со всеми возможными полями (10+ полей) отпугивают. Пользователь не понимает что обязательно.",
+    solution: "Показываем только релевантные поля для выбранного сценария.",
+    pros: ["Меньше полей = меньше friction", "Логичная последовательность", "Нет irrelevant вопросов"],
+    cons: ["Сложнее реализовать", "Нужно тестировать все ветки"],
+    useCases: ["Checkout", "Регистрация с разными ролями", "Анкеты"],
+    mockupType: "conditional-fields",
+    mockupConfig: {
+      sections: [
+        {
+          title: "Способ получения",
+          options: ["Самовывоз", "Курьером", "Почтой"],
+        },
+      ],
+    },
+    platforms: ["ios", "android"],
+    severity: "medium",
+    authorName: "Amazon / Tinkoff",
+    categorySlug: "forms-input",
+    tagSlugs: ["complexity", "progressive-disclosure", "friction-reduction", "cross-platform"],
+    guidelines: [
+      {
+        title: "Show only relevant fields",
+        body: "Don't show all 15 form fields at once. Show only those relevant to user's previous choices. Progressive disclosure reduces cognitive load.",
+        source: "nielsen",
+      },
+      {
+        title: "Animate field appearance",
+        body: "When fields appear/disappear, animate the transition. Sudden jumps confuse users about what changed.",
+        source: "material",
+      },
+    ],
+  },
+
+  // ===== AUTOSAVE DRAFT (forms-input) =====
+  {
+    slug: "autosave-draft",
+    title: "Autosave draft",
+    summary:
+      "Длинные формы автоматически сохраняются — пользователь может вернуться позже.",
+    description:
+      "При заполнении длинной формы (анкета, заказ, отчёт) — каждые 5 секунд форма сохраняется в localStorage. Если пользователь закрыл вкладку/приложение — при возврате форма восстановлена.",
+    problemStatement:
+      "Пользователь заполнил 20 полей, отвлёкся, закрыл вкладку — всё потеряно. В следующий раз не хочет начинать заново.",
+    solution: "Автосохранение + восстановление при возврате.",
+    pros: [
+      "Снижает abandonment на длинных формах",
+      "Пользователь не боится прерывания",
+      "Чувство надёжности",
+    ],
+    cons: ["Нужно управлять конфликтами версий", "Privacy concerns — что сохраняется"],
+    useCases: ["Длинные анкеты", "Многошаговые формы", "Контентные редакторы"],
+    mockupType: "autosave-draft",
+    mockupConfig: {
+      fields: [
+        { label: "Имя", value: "Анна Иванова" },
+        { label: "Email", value: "anna@example.com" },
+        { label: "Комментарий", value: "Заказ нужно доставить до 18:00" },
+      ],
+      lastSaved: "2 сек назад",
+    },
+    platforms: ["ios", "android"],
+    severity: "medium",
+    authorName: "Google Forms / Notion",
+    categorySlug: "forms-input",
+    tagSlugs: ["high-dropoff", "friction-reduction", "cross-platform"],
+    guidelines: [
+      {
+        title: "Save automatically, restore transparently",
+        body: "Don't ask 'do you want to save?'. Save silently. When user returns, restore silently with a small 'draft restored' notice.",
+        source: "nielsen",
+      },
+      {
+        title: "Show last saved time",
+        body: "Display 'last saved 5 sec ago' so users know their work is safe. Reduces anxiety on long forms.",
+        source: "material",
+      },
+    ],
+  },
+
+  // ===== FILE UPLOAD PREVIEW (forms-input) =====
+  {
+    slug: "file-upload-preview",
+    title: "File upload with preview",
+    summary:
+      "Загрузка файлов с прогрессом, превью и возможностью заменить/удалить.",
+    description:
+      "Кнопка «Загрузить фото» → выбор файла → прогресс-бар загрузки → превью с кнопками «Заменить» и «Удалить». Можно загрузить несколько файлов с превью сеткой.",
+    problemStatement:
+      "Загрузка без превью и прогресса — пользователь не понимает что загрузилось, боится повторить. Многократная загрузка одного и того же.",
+    solution: "Превью + прогресс + кнопки управления для каждого файла.",
+    pros: ["Виден результат загрузки", "Прогресс снижает anxiety", "Лёгкое управление"],
+    cons: ["Нужна инфраструктура storage"],
+    useCases: ["Загрузка фото профиля", "Документы KYC", "Фотографии товаров"],
+    mockupType: "file-upload-preview",
+    mockupConfig: {
+      maxFiles: 3,
+      existingFiles: [
+        { name: "avatar.jpg", size: "240 KB", progress: 100 },
+      ],
+    },
+    platforms: ["ios", "android"],
+    severity: "low",
+    authorName: "Dropbox / Google Photos",
+    categorySlug: "forms-input",
+    tagSlugs: ["clarity", "friction-reduction", "cross-platform"],
+    guidelines: [
+      {
+        title: "Always show preview after upload",
+        body: "Show a thumbnail preview after upload. Users need visual confirmation that the right file was uploaded.",
+        source: "nielsen",
+      },
+      {
+        title: "Show progress for uploads >2 seconds",
+        body: "For uploads longer than 2 seconds, show percentage progress. Indeterminate spinners make users think it's stuck.",
+        source: "material",
+      },
+    ],
+  },
+
+  // ===== GUEST CHECKOUT (checkout-payment) =====
+  {
+    slug: "guest-checkout",
+    title: "Guest checkout (no account required)",
+    summary:
+      "Возможность купить без обязательной регистрации — главный фактор снижения cart abandonment.",
+    description:
+      "На экране checkout — две опции: «Купить как гость» (только email) и «Создать аккаунт» (с паролем). Гость может позже создать аккаунт с тем же email.",
+    problemStatement:
+      "34% пользователей бросают корзину, если их заставляют создавать аккаунт (Baymard исследование). Это топ-1 причина abandonment.",
+    solution: "Никогда не требуйте аккаунт для покупки. Опционально, не обязательно.",
+    pros: ["Снижает cart abandonment на 20-30%", "Больше конверсия", "Меньше friction"],
+    cons: ["Нет data для retention", "Нужно offer signup post-purchase"],
+    useCases: ["Любой e-commerce", "SaaS trial", "Подписки"],
+    mockupType: "guest-checkout",
+    mockupConfig: {
+      options: [
+        { id: "guest", title: "Купить как гость", desc: "Только email — быстро", recommended: true },
+        { id: "signup", title: "Создать аккаунт", desc: "Пароль + сохранение данных" },
+      ],
+    },
+    platforms: ["ios", "android"],
+    severity: "high",
+    authorName: "Amazon / Baymard Research",
+    categorySlug: "checkout-payment",
+    tagSlugs: ["high-dropoff", "friction-reduction", "cross-platform"],
+    guidelines: [
+      {
+        title: "Never force account creation",
+        body: "34% of users abandon if forced to create an account (Baymard). Always offer guest checkout. Account creation should be optional post-purchase.",
+        source: "nielsen",
+      },
+      {
+        title: "Offer account creation post-purchase",
+        body: "After successful guest purchase, offer account creation with prefilled email. Higher conversion than forcing it upfront.",
+        source: "material",
+      },
+    ],
+  },
+
+  // ===== SAVE CARD TOKENIZED (checkout-payment) =====
+  {
+    slug: "save-card-tokenized",
+    title: "Save card (tokenized, secure)",
+    summary:
+      "Безопасное сохранение карты через tokenization — следующий вход без ввода данных.",
+    description:
+      "После первой оплаты — чекбокс «Сохранить карту для следующих покупок». Карта сохраняется через tokenization (Stripe, CloudPayments). При следующем checkout — выбор из сохранённых карт.",
+    problemStatement:
+      "Повторный ввод карты каждый раз — главный friction для возвращающих покупателей. 50% бросают на этом шаге.",
+    solution:
+      "Tokenization сохраняет карту безопасно (PCI-DSS compliant). Один тап — оплата сохранённой картой.",
+    pros: [
+      "Возвращающиеся покупатели покупают в 1 тап",
+      "PCI-DSS compliant (нет хранения PAN)",
+      "Снижает checkout time на 60%",
+    ],
+    cons: ["Нужен платежный провайдер с tokenization"],
+    useCases: ["E-commerce", "Подписки", "Food delivery", "Любой повторный платеж"],
+    mockupType: "save-card-tokenized",
+    mockupConfig: {
+      savedCards: [
+        { brand: "visa", last4: "4242", expiry: "12/27", default: true },
+        { brand: "mastercard", last4: "5555", expiry: "08/26", default: false },
+      ],
+      newCard: false,
+    },
+    platforms: ["ios", "android"],
+    severity: "high",
+    authorName: "Stripe / Shopify",
+    categorySlug: "checkout-payment",
+    tagSlugs: ["high-dropoff", "friction-reduction", "cross-platform"],
+    guidelines: [
+      {
+        title: "Tokenize, never store PAN",
+        body: "Never store Primary Account Numbers (PAN) yourself. Use payment provider's tokenization. You're not PCI scope then.",
+        source: "nielsen",
+      },
+      {
+        title: "Default to last used card",
+        body: "Pre-select the last used saved card. Most returning users will use the same card again.",
+        source: "material",
+      },
+    ],
+  },
+
+  // ===== ABANDONED CART RECOVERY (checkout-payment) =====
+  {
+    slug: "abandoned-cart-recovery",
+    title: "Abandoned cart recovery",
+    summary:
+      "Push/email со ссылкой на брошенную корзину — главная стратегия recovery.",
+    description:
+      "Если пользователь оставил корзину >30 минут — push: «Ваша корзина ждёт. Завершите заказ». Deep link прямо в checkout с сохранёнными товарами.",
+    problemStatement:
+      "70% корзин брошены (Baymard). Без recovery — потеря 70% потенциальной выручки.",
+    solution: "Push/email через 30 мин / 24 часа / 3 дня. Скидка в последнем напоминании.",
+    pros: [
+      "Восстанавливает 10-15% брошенных корзин",
+      "Высокий ROI",
+      "Не требует действия от пользователя",
+    ],
+    cons: ["Нужен push permission", "Privacy concerns — частота"],
+    useCases: ["E-commerce", "Food delivery", "Travel booking"],
+    mockupType: "abandoned-cart-recovery",
+    mockupConfig: {
+      notification: {
+        title: "Вы забыли корзину",
+        body: "2 товара ждут. Завершите заказ за 30 секунд.",
+        cta: "Вернуться к заказу",
+        discount: "Скидка 10% по коду CART10",
+      },
+      items: [
+        { name: "Кроссовки Nike Air", price: "8 990 ₽" },
+        { name: "Носки sport x3", price: "690 ₽" },
+      ],
+    },
+    platforms: ["ios", "android"],
+    severity: "high",
+    authorName: "Baymard / Shopify",
+    categorySlug: "checkout-payment",
+    tagSlugs: ["high-dropoff", "friction-reduction", "cross-platform"],
+    guidelines: [
+      {
+        title: "Send recovery in 30 minutes",
+        body: "First recovery message within 30 minutes has highest conversion. User still remembers the cart.",
+        source: "nielsen",
+      },
+      {
+        title: "Deep link to checkout, not home",
+        body: "Deep link should land user directly in checkout with saved cart, not the home page. Reduce friction.",
+        source: "material",
+      },
+    ],
+  },
+
+  // ===== 404 PAGE NOT FOUND RECOVERY (errors-recovery) =====
+  {
+    slug: "page-not-found-recovery",
+    title: "404 / page not found recovery",
+    summary:
+      "404 страница с навигацией — не тупик, а точка входа.",
+    description:
+      "404 не «Страница не найдена», а: иконка, объяснение, «Возможно вы искали» (популярные страницы), поиск, кнопка «На главную».",
+    problemStatement:
+      "Стандартная 404 = тупик. Пользователь закрывает приложение/сайт. Bounce rate 80%+.",
+    solution: "Превращаем 404 в точку входа — навигация + поиск + популярные страницы.",
+    pros: ["Возвращает пользователя в funnel", "Снижает bounce", "Обучает структуре"],
+    cons: ["Нужна аналитика популярных страниц"],
+    useCases: ["Любое приложение с deep links", "Web-приложения", "Content apps"],
+    mockupType: "page-not-found-recovery",
+    mockupConfig: {
+      title: "Страница не найдена",
+      body: "Возможно, ссылка устарела или была перемещена",
+      popularPages: ["Главная", "Каталог", "Корзина", "Профиль"],
+      searchPlaceholder: "Или найдите что нужно",
+    },
+    platforms: ["ios", "android"],
+    severity: "low",
+    authorName: "GitHub / Stripe",
+    categorySlug: "errors-recovery",
+    tagSlugs: ["clarity", "friction-reduction", "cross-platform"],
+    guidelines: [
+      {
+        title: "404 is a navigation point",
+        body: "Don't show a dead-end 404. Show search, popular pages, and a clear path home. 404 should be a recovery point.",
+        source: "nielsen",
+      },
+      {
+        title: "Match 404 tone to brand",
+        body: "404 is a brand moment. GitHub's octocat, Stripe's illustration — make it memorable, not generic.",
+        source: "material",
+      },
+    ],
+  },
+
+  // ===== SESSION EXPIRED RECOVERY (errors-recovery) =====
+  {
+    slug: "session-expired-recovery",
+    title: "Session expired recovery",
+    summary:
+      "При истечении сессии — понятное сообщение и кнопка быстрого восстановления.",
+    description:
+      "Сессия истекла → показываем inline баннер (не модалку): «Сессия истекла. Войдите снова, чтобы продолжить». Кнопка «Войти через Face ID» — 1 тап, без форм.",
+    problemStatement:
+      "Generic «Session expired» модалки пугают — пользователь думает что данные потеряны. Длинный re-login flow = abandon.",
+    solution: "Inline баннер + быстрый re-auth через биометрию.",
+    pros: [
+      "Минимальная friction при восстановлении",
+      "Пользователь не теряет контекст",
+      "Биометрия = 1 тап",
+    ],
+    cons: ["Нужен secure token management"],
+    useCases: ["Banking", "Приложения с чувствительными данными", "SaaS"],
+    mockupType: "session-expired-recovery",
+    mockupConfig: {
+      message: "Сессия истекла по безопасности",
+      subMessage: "Ваши данные сохранены. Войдите снова, чтобы продолжить.",
+      quickAuth: "Face ID",
+    },
+    platforms: ["ios", "android"],
+    severity: "medium",
+    authorName: "Banking apps",
+    categorySlug: "errors-recovery",
+    tagSlugs: ["high-dropoff", "friction-reduction", "error-prone", "cross-platform"],
+    guidelines: [
+      {
+        title: "Don't lose user's context",
+        body: "When session expires, preserve user's in-progress work. After re-auth, return them to exactly where they were.",
+        source: "nielsen",
+      },
+      {
+        title: "Quick re-auth via biometrics",
+        body: "Use biometrics for session re-authentication. Don't force full password entry for routine expirations.",
+        source: "hig",
+      },
+    ],
+  },
+
+  // ===== FORM CONFLICT RESOLUTION (errors-recovery) =====
+  {
+    slug: "form-conflict-resolution",
+    title: "Form conflict resolution (optimistic locking)",
+    summary:
+      "При одновременном редактировании — показываем конфликт и предлагаем слияние.",
+    description:
+      "Пользователь A редактирует форму, пока пользователь B сохраняет изменения. При сохранении A — показываем diff: «B изменил эти поля. Сохранить вашу версию, версию B, или слить?»",
+    problemStatement:
+      "При одновременном редактировании последний сохраняет выигрывает — данные теряются. Пользователь не понимает, почему его изменения исчезли.",
+    solution: "Optimistic locking + diff view при конфликте.",
+    pros: ["Нет потери данных", "Прозрачность", "Командная работа"],
+    cons: ["Сложно реализовать", "Нужна инфраструктура версионирования"],
+    useCases: ["B2B SaaS с командным редактированием", "Документы", "CRM"],
+    mockupType: "form-conflict-resolution",
+    mockupConfig: {
+      conflicts: [
+        { field: "Сумма", yours: "9 680 ₽", theirs: "9 980 ₽" },
+        { field: "Адрес", yours: "Тверская 12", theirs: "Тверская 14" },
+      ],
+    },
+    platforms: ["ios", "android"],
+    severity: "low",
+    authorName: "Notion / Linear",
+    categorySlug: "errors-recovery",
+    tagSlugs: ["error-prone", "complexity", "cross-platform"],
+    guidelines: [
+      {
+        title: "Detect conflicts, don't overwrite silently",
+        body: "Use optimistic locking. When two users edit the same record, show the conflict and let them choose, don't silently overwrite.",
+        source: "nielsen",
+      },
+      {
+        title: "Show diff, offer merge",
+        body: "Show what each user changed. Offer 'keep mine', 'keep theirs', 'merge' options. Don't force all-or-nothing.",
+        source: "material",
+      },
+    ],
+  },
+
+  // ===== INBOX ZERO CELEBRATION (empty-states) =====
+  {
+    slug: "inbox-zero-celebration",
+    title: "Inbox zero celebration",
+    summary:
+      "Позитивный empty state когда «всё сделано» — поздравление вместо «нет данных».",
+    description:
+      "Когда почта/задачи пусты — не «Нет писем», а celebratory state: иконка радости, «Вы справились! Все задачи выполнены», «Отдохните 🙂».",
+    problemStatement:
+      "«No items» empty state воспринимается как «здесь ничего нет для меня». Пользователь чувствует, что приложение не работает.",
+    solution: "Превращаем empty в достижение — позитивная эмоция.",
+    pros: ["Позитивная эмоция", "Мотивация возвращаться", "Геймификация без усилий"],
+    cons: ["Может надоесть при частом показе"],
+    useCases: ["Email", "Task managers", "To-do apps", "Notifications"],
+    mockupType: "inbox-zero-celebration",
+    mockupConfig: {
+      emoji: "🎉",
+      title: "Все задачи выполнены!",
+      body: "Вы молодец. Самое время отдохнуть.",
+    },
+    platforms: ["ios", "android"],
+    severity: "low",
+    authorName: "Slack / Duolingo / Things",
+    categorySlug: "empty-states",
+    tagSlugs: ["clarity", "friction-reduction", "cross-platform"],
+    guidelines: [
+      {
+        title: "Celebrate empty as achievement",
+        body: "When user reaches empty (inbox zero, all tasks done), celebrate it as a positive moment. Reinforce the behavior.",
+        source: "nielsen",
+      },
+      {
+        title: "Vary celebration to avoid fatigue",
+        body: "Don't show the same celebration every time. Vary messages/illustrations to avoid fatigue.",
+        source: "material",
+      },
+    ],
+  },
+
+  // ===== SEARCH NO RESULTS EXTENDED (empty-states) =====
+  {
+    slug: "search-no-results-extended",
+    title: "Search no results — extended recovery",
+    summary:
+      "Расширенный empty state поиска: похожие запросы + категории + подписка.",
+    description:
+      "Если поиск ничего не нашёл: «Возможно вы искали» (4 похожих запроса), «Популярные категории», кнопка «Сообщить, когда появится» (с email подпиской).",
+    problemStatement:
+      "«Ничего не найдено» = конец funnel. Пользователь уходит к конкурентам.",
+    solution: "Превращаем «нет результатов» в точку входа.",
+    pros: ["Снижает bounce на 25-40%", "Собирает demand-сигналы", "Подписка на появление"],
+    cons: ["Нужна инфраструктура для похожих запросов"],
+    useCases: ["E-commerce", "Контентные приложения", "Marketplace"],
+    mockupType: "search-no-results-extended",
+    mockupConfig: {
+      query: "зимние кроссовки nike 42",
+      similar: ["Зимние кроссовки", "Кроссовки Nike", "Кроссовки 42 размера"],
+      popularCategories: ["Обувь", "Спорт", "Зимнее"],
+      subscribeCta: "Сообщить, когда появится",
+    },
+    platforms: ["ios", "android"],
+    severity: "high",
+    authorName: "Amazon / Airbnb",
+    categorySlug: "empty-states",
+    tagSlugs: ["high-dropoff", "clarity", "cross-platform"],
+    guidelines: [
+      {
+        title: "Empty search is a new entry point",
+        body: "Don't show 'no results' as dead-end. Show similar queries, popular categories, and a way to be notified when the item appears.",
+        source: "nielsen",
+      },
+    ],
+  },
+
+  // ===== BLUR UP IMAGE LOADING (loading-waiting) =====
+  {
+    slug: "blur-up-image-loading",
+    title: "Blur-up image loading",
+    summary:
+      "Сначала размытое превью, потом чёткое изображение — воспринимается мгновенно.",
+    description:
+      "Загружаем tiny placeholder (10x10 px, ~200 байт) → растягиваем с blur → когда загрузится полное, плавно убираем blur. Эффект: мгновенная загрузка изображений.",
+    problemStatement:
+      "Пустые места при загрузке изображений (особенно в лентах) воспринимаются как «приложение тормозит».",
+    solution: "Blur-up показывает структуру мгновенно, деталь появляется плавно.",
+    pros: [
+      "Снижает perceived loading time на 50%+",
+      "Меньше layout shift",
+      "Профессиональный вид",
+    ],
+    cons: ["Нужен backend для генерации tiny placeholders"],
+    useCases: ["Ленты изображений", "E-commerce каталоги", "Галереи", "Карточки товаров"],
+    mockupType: "blur-up-image-loading",
+    mockupConfig: {
+      images: [
+        { id: 1, color: "#9f1239", loaded: true },
+        { id: 2, color: "#0891b2", loaded: false },
+        { id: 3, color: "#65a30d", loaded: true },
+      ],
+    },
+    platforms: ["ios", "android"],
+    severity: "medium",
+    authorName: "Medium / Cloudinary",
+    categorySlug: "loading-waiting",
+    tagSlugs: ["clarity", "friction-reduction", "cross-platform"],
+    guidelines: [
+      {
+        title: "Blur-up for perceived speed",
+        body: "Show a tiny blurred placeholder while the full image loads. Users perceive it as faster than a blank space or spinner.",
+        source: "nielsen",
+      },
+      {
+        title: "LQIP should be tiny (<1KB)",
+        body: "Low Quality Image Placeholder should be 10-20px wide, under 1KB. Larger defeats the purpose.",
+        source: "material",
+      },
+    ],
+  },
+
+  // ===== STAGGERED CONTENT REVEAL (loading-waiting) =====
+  {
+    slug: "staggered-content-reveal",
+    title: "Staggered content reveal",
+    summary:
+      "Элементы списка появляются по очереди с задержкой — плавная загрузка.",
+    description:
+      "При загрузке ленты/списка — элементы появляются по одному с задержкой 50-100ms. Создаёт ощущение скорости, а не ожидания.",
+    problemStatement:
+      "Синхронная загрузка всех элементов выглядит как «прыг» — неприятный layout shift. Спиннеры раздражают.",
+    solution: "Staggered animation — элементы появляются по очереди, плавно.",
+    pros: ["Плавная загрузка", "Профессиональный вид", "Меньше layout shift"],
+    cons: ["Может задерживать первое interaction на 100-200ms"],
+    useCases: ["Ленты контента", "Списки товаров", "Карточки в grid", "Dashboard widgets"],
+    mockupType: "staggered-content-reveal",
+    mockupConfig: {
+      itemCount: 6,
+      delayStep: 80,
+    },
+    platforms: ["ios", "android"],
+    severity: "low",
+    authorName: "Apple / Linear",
+    categorySlug: "loading-waiting",
+    tagSlugs: ["friction-reduction", "clarity", "cross-platform"],
+    guidelines: [
+      {
+        title: "Stagger for lists, not single items",
+        body: "Staggered reveal works for lists. For single items, just show them. Staggering single items adds artificial delay.",
+        source: "nielsen",
+      },
+      {
+        title: "Maximum 50-100ms per step",
+        body: "Stagger step should be 50-100ms. Beyond that, users wait — defeating the purpose.",
+        source: "material",
+      },
+    ],
+  },
+
+  // ===== HAPTIC FEEDBACK (notifications-feedback) =====
+  {
+    slug: "haptic-feedback",
+    title: "Haptic feedback on actions",
+    summary:
+      "Тактильная отдача при действиях — лайк, свайп, подтверждение, ошибка.",
+    description:
+      "При ключевых действиях — короткая вибрация: лайк (мягкая), завершение (уверенная), ошибка (резкая). Усиляет feeling of control.",
+    problemStatement:
+      "Без haptic feedback действия «повисают» — пользователь не уверен, сработало ли. Тапает повторно, создавая дубликаты.",
+    solution: "Haptic для каждого значимого действия.",
+    pros: [
+      "Подтверждение без визуального shift",
+      "Усиляет feeling of control",
+      "Стандарт на iOS (expected behavior)",
+    ],
+    cons: ["Не все Android-устройства поддерживают", "Может раздражать при избытке"],
+    useCases: ["Лайки", "Свайпы", "Подтверждения", "Pull-to-refresh", "Завершение действий"],
+    mockupType: "haptic-feedback",
+    mockupConfig: {
+      actions: [
+        { id: "like", label: "Лайк", haptic: "soft" },
+        { id: "success", label: "Успех", haptic: "medium" },
+        { id: "warning", label: "Внимание", haptic: "rigid" },
+        { id: "error", label: "Ошибка", haptic: "heavy" },
+      ],
+    },
+    platforms: ["ios", "android"],
+    severity: "low",
+    authorName: "Apple HIG",
+    categorySlug: "notifications-feedback",
+    tagSlugs: ["clarity", "friction-reduction", "ios", "android"],
+    guidelines: [
+      {
+        title: "Haptic for confirmation, not just visual",
+        body: "Use haptics to confirm actions users can't always see (button press at edge of screen, swipe complete). It reinforces feedback.",
+        source: "hig",
+      },
+      {
+        title: "Don't overuse haptics",
+        body: "Haptics should be reserved for meaningful moments. Constant buzzing annoys users and drains battery.",
+        source: "material",
+      },
+    ],
+  },
+
+  // ===== DESTRUCTIVE ACTION CONFIRMATION (notifications-feedback) =====
+  {
+    slug: "destructive-action-confirm",
+    title: "Destructive action confirmation",
+    summary:
+      "Подтверждение для необратимых действий (удалить, очистить) с явным объяснением.",
+    description:
+      "При попытке удалить → модалка: красная иконка, «Удалить аккаунт?», перечисление что будет потеряно, кнопка «Удалить» (красная, disabled 3 сек), кнопка «Отмена» (по умолчанию).",
+    problemStatement:
+      "Случайные удаления — главный source of data loss. Без подтверждения пользователь теряет данные в 1 тап.",
+    solution: "Подтверждение + объяснение последствий + delayed destructive button.",
+    pros: ["Защита от случайных действий", "Прозрачность последствий", "Снижает support-тикеты"],
+    cons: ["Может раздражать при частом подтверждении", "Нужно балансировать с friction"],
+    useCases: ["Удаление аккаунта", "Очистка корзины", "Удаление документов", "Cancel subscription"],
+    mockupType: "destructive-action-confirm",
+    mockupConfig: {
+      icon: "Trash2",
+      title: "Удалить аккаунт?",
+      consequences: [
+        "Все ваши данные будут удалены",
+        "Подписки отменены",
+        "Восстановление невозможно",
+      ],
+      confirmLabel: "Удалить",
+      cancelLabel: "Отмена",
+    },
+    platforms: ["ios", "android"],
+    severity: "high",
+    authorName: "Apple HIG / Material Design",
+    categorySlug: "notifications-feedback",
+    tagSlugs: ["error-prone", "high-dropoff", "cross-platform"],
+    guidelines: [
+      {
+        title: "Confirm destructive, not routine",
+        body: "Confirm only irreversible destructive actions (delete account, clear all data). Routine deletes (one item) don't need confirmation.",
+        source: "nielsen",
+      },
+      {
+        title: "Default to cancel, delay confirm",
+        body: "Default button should be Cancel. Destructive button should be visually distinct (red) and ideally delayed 3 sec to prevent reflex taps.",
+        source: "hig",
+      },
+    ],
+  },
+
+  // ===== SWIPE TO DELETE WITH UNDO (notifications-feedback) =====
+  {
+    slug: "swipe-to-delete-undo",
+    title: "Swipe-to-delete with undo",
+    summary:
+      "Свайп влево для удаления + snackbar с undo в течение 5 секунд.",
+    description:
+      "Свайп элемента списка влево → удаляется с анимацией → snackbar снизу «Удалено. Отменить» (5 сек). Если не тапнул — окончательно удалено.",
+    problemStatement:
+      "Случайные свайпы удаляют элементы без восстановления. Пользователь не может вернуть данные.",
+    solution: "Undo в течение 5 сек — стандарт iOS/Android для swipe-to-delete.",
+    pros: [
+      "Знакомый паттерн",
+      "Восстановление без модалок",
+      "Меньше friction чем подтверждение",
+    ],
+    cons: ["Undo окно короткое", "После 5 сек — безвозвратно"],
+    useCases: ["Списки писем", "Задачи", "Избранное", "Корзина"],
+    mockupType: "swipe-to-delete-undo",
+    mockupConfig: {
+      items: [
+        { id: 1, title: "Заказ #1028", subtitle: "Доставлен" },
+        { id: 2, title: "Заказ #1025", subtitle: "В пути" },
+        { id: 3, title: "Заказ #1020", subtitle: "Отменён" },
+      ],
+      undoWindow: 5,
+    },
+    platforms: ["ios", "android"],
+    severity: "medium",
+    authorName: "Gmail / Apple Mail",
+    categorySlug: "notifications-feedback",
+    tagSlugs: ["error-prone", "friction-reduction", "cross-platform"],
+    guidelines: [
+      {
+        title: "Always provide undo for swipe-delete",
+        body: "Swipe-to-delete is fast but error-prone. Always provide undo via snackbar for 5-10 seconds. Eliminates need for confirmation dialogs.",
+        source: "nielsen",
+      },
+      {
+        title: "Destructive swipe is red",
+        body: "When swiping to reveal delete action, show red background with trash icon. Visual cue that action is destructive.",
+        source: "material",
+      },
+    ],
+  },
+
+  // ===== DARK MODE TOGGLE (settings-permissions) =====
+  {
+    slug: "dark-mode-toggle",
+    title: "Dark mode (system / light / dark)",
+    summary:
+      "3 опции темы: системная, светлая, тёмная — с предпросмотром и мгновенным применением.",
+    description:
+      "Три опции: «Как в системе» (по умолчанию), «Светлая», «Тёмная». При выборе — мгновенное применение с анимацией перехода. Сохраняется в preferences.",
+    problemStatement:
+      "Только binary toggle (light/dark) не учитывает системную тему. Пользователь вынужден переключать вручную при смене времени суток.",
+    solution: "System option + manual override. Автоматически следует системной теме.",
+    pros: [
+      "Уважает системные настройки",
+      "Ручной override для контроля",
+      "Стандарт iOS/Android",
+    ],
+    cons: ["Нужна поддержка CSS prefers-color-scheme"],
+    useCases: ["Любое приложение с dark/light", "Читалки", "Контентные приложения"],
+    mockupType: "dark-mode-toggle",
+    mockupConfig: {
+      options: [
+        { id: "system", label: "Как в системе", desc: "Следует настройкам устройства", icon: "Smartphone" },
+        { id: "light", label: "Светлая", desc: "Всегда светлая", icon: "Sun" },
+        { id: "dark", label: "Тёмная", desc: "Всегда тёмная", icon: "Moon" },
+      ],
+      current: "system",
+    },
+    platforms: ["ios", "android"],
+    severity: "low",
+    authorName: "Apple / Material 3",
+    categorySlug: "settings-permissions",
+    tagSlugs: ["clarity", "complexity", "cross-platform"],
+    guidelines: [
+      {
+        title: "Default to system preference",
+        body: "Default theme should follow system preference (prefers-color-scheme). Don't force light on users who set dark mode.",
+        source: "hig",
+      },
+      {
+        title: "Apply theme instantly",
+        body: "Theme change should apply instantly, no app restart. Animate transition for smoothness.",
+        source: "material",
+      },
+    ],
+  },
+
+  // ===== ACCOUNT DELETION FLOW (settings-permissions) =====
+  {
+    slug: "account-deletion-flow",
+    title: "Account deletion flow with grace period",
+    summary:
+      "Удаление аккаунта с 30-дневным grace period — можно восстановить в любой момент.",
+    description:
+      "Запрос удаления → объяснение последствий → выбор причины (опционально) → подтверждение → аккаунт деактивирован 30 дней (можно восстановить) → окончательное удаление.",
+    problemStatement:
+      "Apple App Store требует возможность удаления аккаунта с 2022. Без grace period — пользовательские данные теряются навсегда при случайном удалении.",
+    solution: "30-дневный grace period + email уведомления о восстановлении.",
+    pros: [
+      "Соответствует App Store Review Guideline 5.1.1",
+      "Снижает страх удаления",
+      "Восстановление в течение 30 дней",
+    ],
+    cons: ["Нужна инфраструктура для grace period", "GDPR compliance"],
+    useCases: ["Любое приложение с аккаунтами (Apple App Store requirement)"],
+    mockupType: "account-deletion-flow",
+    mockupConfig: {
+      stages: [
+        { title: "Запрос удаления", desc: "Подтвердите намерение" },
+        { title: "Grace period 30 дней", desc: "Аккаунт деактивирован" },
+        { title: "Окончательное удаление", desc: "Через 30 дней" },
+      ],
+      gracePeriodDays: 30,
+    },
+    platforms: ["ios", "android"],
+    severity: "medium",
+    authorName: "Apple App Store / GDPR",
+    categorySlug: "settings-permissions",
+    tagSlugs: ["high-dropoff", "error-prone", "clarity", "cross-platform"],
+    guidelines: [
+      {
+        title: "Account deletion is mandatory (App Store)",
+        body: "Apple App Store requires account deletion option since 2022. Apps without it risk rejection. Also required by GDPR.",
+        source: "hig",
+      },
+      {
+        title: "Provide grace period for recovery",
+        body: "Don't delete immediately. 30-day grace period lets users recover from impulse decisions. Send email reminders.",
+        source: "nielsen",
+      },
+    ],
+  },
+
+  // ============================================================
+  // BATCH 3 — 15 E-COMMERCE PATTERNS (каталог + карточка товара)
+  // ============================================================
+
+  // ===== PRODUCT FILTER FACETS (search-discovery) =====
+  {
+    slug: "product-filter-facets",
+    title: "Product filter facets with counts",
+    summary:
+      "Фильтры с предпросмотром количества товаров в каждой опции (Кроссовки [231]).",
+    description:
+      "При открытии фильтров — каждая опция показывает количество совпадений. Пользователь видит «Кроссовки (231)» перед выбором — не открывает пустую категорию. Динамическое обновление при изменении других фильтров.",
+    problemStatement:
+      "Фильтры без counts заставляют гадать. Пользователь выбирает фильтр → 0 результатов → разочарование → abandon.",
+    solution: "Faceted search с live counts — пользователь видит результат заранее.",
+    pros: [
+      "Снижает empty results на 60%",
+      "Управляет ожиданиями",
+      "Помогает сузить поиск умно",
+    ],
+    cons: ["Нужен быстрый backend для live counts"],
+    useCases: ["E-commerce", "Real estate", "Travel booking", "Любой каталог"],
+    mockupType: "product-filter-facets",
+    mockupConfig: {
+      facets: [
+        {
+          name: "Категория",
+          options: [
+            { label: "Кроссовки", count: 231 },
+            { label: "Ботинки", count: 89 },
+            { label: "Сандалии", count: 34 },
+          ],
+        },
+        {
+          name: "Бренд",
+          options: [
+            { label: "Nike", count: 142 },
+            { label: "Adidas", count: 98 },
+            { label: "Puma", count: 45 },
+          ],
+        },
+        {
+          name: "Размер",
+          options: [
+            { label: "40", count: 67 },
+            { label: "41", count: 89 },
+            { label: "42", count: 112 },
+            { label: "43", count: 78 },
+          ],
+        },
+      ],
+    },
+    platforms: ["ios", "android"],
+    severity: "high",
+    authorName: "Amazon / Baymard",
+    categorySlug: "search-discovery",
+    tagSlugs: ["high-dropoff", "clarity", "friction-reduction", "cross-platform"],
+    guidelines: [
+      {
+        title: "Show counts next to each facet",
+        body: "Always show product counts next to each filter option. Users want to know what they'll get before tapping.",
+        source: "nielsen",
+      },
+      {
+        title: "Update counts dynamically",
+        body: "When user selects a filter, update counts in other facets. Don't show options that would yield 0 results.",
+        source: "material",
+      },
+    ],
+  },
+
+  // ===== SORT DROPDOWN (search-discovery) =====
+  {
+    slug: "sort-dropdown",
+    title: "Sort dropdown (relevance, price, rating)",
+    summary:
+      "Выпадающий список сортировки: популярные, цена↑/↓, новинки, рейтинг.",
+    description:
+      "Sort dropdown с 5 стандартными опциями. Текущая сортировка показана в кнопке. При изменении — мгновенное обновление списка без перезагрузки.",
+    problemStatement:
+      "Без сортировки пользователь листает случайный порядок — не находит лучшее. Закрывает приложение.",
+    solution: "5 стандартных сортировок — covers 95% use cases.",
+    pros: ["Стандартный паттерн", "Мгновенное обновление", "Управляет порядком просмотра"],
+    cons: ["Нужна backend поддержка всех sort orders"],
+    useCases: ["E-commerce каталоги", "Списки отзывов", "Поисковые результаты"],
+    mockupType: "sort-dropdown",
+    mockupConfig: {
+      options: [
+        { id: "popular", label: "По популярности" },
+        { id: "price-asc", label: "Сначала дешёвые" },
+        { id: "price-desc", label: "Сначала дорогие" },
+        { id: "new", label: "Новинки" },
+        { id: "rating", label: "По рейтингу" },
+      ],
+      current: "popular",
+    },
+    platforms: ["ios", "android"],
+    severity: "low",
+    authorName: "Amazon / Wildberries",
+    categorySlug: "search-discovery",
+    tagSlugs: ["clarity", "friction-reduction", "cross-platform"],
+    guidelines: [
+      {
+        title: "5 standard sort options",
+        body: "Popular, price asc/desc, newest, rating. Covers 95% of user needs. Don't add more — choice paralysis.",
+        source: "nielsen",
+      },
+      {
+        title: "Show current sort visibly",
+        body: "Current sort should be visible in the sort button, not hidden. Users forget what they set.",
+        source: "material",
+      },
+    ],
+  },
+
+  // ===== QUICK VIEW MODAL (search-discovery) =====
+  {
+    slug: "quick-view-modal",
+    title: "Quick view modal",
+    summary:
+      "Быстрый просмотр товара без перехода на карточку — модалка с основной инфой.",
+    description:
+      "На карточке товара — кнопка «Быстрый просмотр» (или long-press). Открывает модалку с: большое фото, название, цена, рейтинг, 3 варианта, кнопка «В корзину». Без перехода на PDP.",
+    problemStatement:
+      "Переход на PDP и обратно для каждого товара = много кликов. Пользователь устаёт листать каталог.",
+    solution: "Quick view показывает 80% инфы в 1 клик.",
+    pros: [
+      "Снижает catalog browsing friction",
+      "Меньше page transitions",
+      "Higher product discovery rate",
+    ],
+    cons: ["Не подходит для мобильных (мало места)", "Нужна carefully designed modal"],
+    useCases: ["E-commerce (desktop)", "Catalogs", "Real estate"],
+    mockupType: "quick-view-modal",
+    mockupConfig: {
+      product: {
+        name: "Nike Air Max 2024",
+        price: "8 990 ₽",
+        oldPrice: "11 990 ₽",
+        rating: 4.7,
+        reviewsCount: 234,
+        image: "shoe",
+        variants: ["38", "39", "40", "41", "42"],
+      },
+    },
+    platforms: ["ios", "android"],
+    severity: "medium",
+    authorName: "Amazon / ASOS",
+    categorySlug: "search-discovery",
+    tagSlugs: ["friction-reduction", "progressive-disclosure", "cross-platform"],
+    guidelines: [
+      {
+        title: "Quick view for desktop, PDP for mobile",
+        body: "On mobile, quick view modals feel cramped. Use long-press or dedicated button. On desktop, hover-to-quick-view works well.",
+        source: "nielsen",
+      },
+      {
+        title: "Show 80% of decision info in quick view",
+        body: "Quick view should have: image, price, rating, variants, add to cart. If user needs more, they go to PDP.",
+        source: "material",
+      },
+    ],
+  },
+
+  // ===== PRICE RANGE SLIDER (search-discovery) =====
+  {
+    slug: "price-range-slider",
+    title: "Price range slider (dual handle)",
+    summary:
+      "Слайдер с двумя ручками для выбора диапазона цен — визуально и точно.",
+    description:
+      "Слайдер с двумя ручками (min и max). Под слайдером — числовые значения. При перетаскивании — динамическое обновление результатов. Гистограмма распределения цен под слайдером.",
+    problemStatement:
+      "Поле ввода min/max цены требует точного значения. Пользователь не знает диапазон цен в каталоге.",
+    solution: "Слайдер — визуальный и интуитивный. Гистограмма показывает распределение.",
+    pros: ["Визуально интуитивный", "Видно распределение цен", "Быстрый диапазон"],
+    cons: ["Трудно точно попасть в нужную цену", "Нужна careful touch handling"],
+    useCases: ["E-commerce", "Real estate", "Travel", "Любая фильтрация по числу"],
+    mockupType: "price-range-slider",
+    mockupConfig: {
+      min: 0,
+      max: 50000,
+      currentMin: 2500,
+      currentMax: 18000,
+      histogram: [12, 28, 45, 67, 89, 102, 78, 56, 34, 18, 8, 3],
+    },
+    platforms: ["ios", "android"],
+    severity: "low",
+    authorName: "Wildberries / Amazon",
+    categorySlug: "search-discovery",
+    tagSlugs: ["friction-reduction", "clarity", "cross-platform"],
+    guidelines: [
+      {
+        title: "Show histogram under slider",
+        body: "Show price distribution histogram under slider. Users see where most products are and adjust range accordingly.",
+        source: "nielsen",
+      },
+      {
+        title: "Combine slider with numeric inputs",
+        body: "Slider for exploration, numeric inputs for precision. Some users want exact price range (e.g. 5000-7000).",
+        source: "material",
+      },
+    ],
+  },
+
+  // ===== RECENTLY VIEWED (search-discovery) =====
+  {
+    slug: "recently-viewed",
+    title: "Recently viewed carousel",
+    summary:
+      "Горизонтальная карусель недавно просмотренных товаров — на главной и в catalog empty states.",
+    description:
+      "Секция «Вы недавно смотрели» с горизонтальной каруселью карточек товаров (до 20 последних). Запоминается даже между сессиями.",
+    problemStatement:
+      "Пользователь видел товар, отвлёкся, вернулся — не может найти. Поиск не помогает (не помнит название).",
+    solution: "Recently viewed — между избранным и поиском.",
+    pros: [
+      "Снижает friction возврата",
+      "Высокий CTR (10-15% кликов в карусель)",
+      "Personalization без усилий пользователя",
+    ],
+    cons: ["Нужно хранить историю per user/device"],
+    useCases: ["E-commerce", "Контентные приложения", "Real estate", "Booking"],
+    mockupType: "recently-viewed",
+    mockupConfig: {
+      items: [
+        { name: "Nike Air Max", price: "8 990 ₽", color: "#9f1239" },
+        { name: "Adidas Ultraboost", price: "12 490 ₽", color: "#0891b2" },
+        { name: "Puma RS-X", price: "6 790 ₽", color: "#65a30d" },
+        { name: "Reebok Nano", price: "9 490 ₽", color: "#7c3aed" },
+      ],
+    },
+    platforms: ["ios", "android"],
+    severity: "low",
+    authorName: "Amazon / Ozon",
+    categorySlug: "search-discovery",
+    tagSlugs: ["friction-reduction", "clarity", "cross-platform"],
+    guidelines: [
+      {
+        title: "Show 5-10 recent items max",
+        body: "Show last 5-10 viewed items. More is overwhelming. Use 'View all' link for full history.",
+        source: "nielsen",
+      },
+      {
+        title: "Persist across sessions",
+        body: "Recently viewed should persist across app launches (and ideally across devices if synced). Most valuable for return visits.",
+        source: "material",
+      },
+    ],
+  },
+
+  // ===== VARIANT SELECTION (forms-input) =====
+  {
+    slug: "variant-selection",
+    title: "Variant selection (color, size)",
+    summary:
+      "Выбор варианта товара визуальными свотчами: цвет кружком, размер кнопкой.",
+    description:
+      "Цвета — кружки с цветной заливкой, выбранный имеет ring. Размеры — квадратные кнопки. При выборе — обновляется цена и availability. Недоступные варианты — disabled.",
+    problemStatement:
+      "Выпадающий список вариантов неудобен на мобильном. Пользователь не видит цвета визуально.",
+    solution: "Visual swatches — цвет кружком, размер кнопкой. Стандарт e-commerce.",
+    pros: [
+      "Визуально интуитивно",
+      "Меньше кликов чем dropdown",
+      "Видна availability сразу",
+    ],
+    cons: ["Сложно при многих вариантах (50+ цветов)"],
+    useCases: ["E-commerce карточка товара", "Конфигураторы", "Custom products"],
+    mockupType: "variant-selection",
+    mockupConfig: {
+      colors: [
+        { name: "Чёрный", hex: "#000000", available: true },
+        { name: "Белый", hex: "#ffffff", available: true },
+        { name: "Красный", hex: "#dc2626", available: true },
+        { name: "Синий", hex: "#2563eb", available: false },
+      ],
+      sizes: [
+        { label: "S", available: true },
+        { label: "M", available: true },
+        { label: "L", available: false },
+        { label: "XL", available: true },
+      ],
+    },
+    platforms: ["ios", "android"],
+    severity: "medium",
+    authorName: "Apple Store / Nike",
+    categorySlug: "forms-input",
+    tagSlugs: ["high-dropoff", "friction-reduction", "clarity", "cross-platform"],
+    guidelines: [
+      {
+        title: "Visual swatches, not dropdowns",
+        body: "Use visual swatches for color (circles), size (square buttons). Dropdowns hide options and require extra taps.",
+        source: "nielsen",
+      },
+      {
+        title: "Disable unavailable variants",
+        body: "Show unavailable variants as disabled (greyed out, not hidden). Users see what's possible and what's not.",
+        source: "material",
+      },
+    ],
+  },
+
+  // ===== SIZE GUIDE PICKER (forms-input) =====
+  {
+    slug: "size-guide-picker",
+    title: "Size guide with measurements",
+    summary:
+      "Таблица размеров с измерениями + помощник подбора по росту/весу.",
+    description:
+      "Кнопка «Таблица размеров» открывает bottom sheet с: таблицей (S/M/L/XL + обхват груди/талии/бёдер), переключателем единиц (см/дюймы), помощником «введите рост/вес» → рекомендуемый размер.",
+    problemStatement:
+      "Разные бренды = разные размеры. S в Nike ≠ S в Zara. Без size guide 30% возвратов из-за неправильного размера.",
+    solution: "Таблица + помощник подбора по параметрам тела.",
+    pros: [
+      "Снижает возвраты на 25-40%",
+      "Повышает confidence при покупке",
+      "Стандарт для fashion e-commerce",
+    ],
+    cons: ["Нужна база измерений per brand"],
+    useCases: ["Fashion e-commerce", "Обувь", "Школьная форма", "Спортивная экипировка"],
+    mockupType: "size-guide-picker",
+    mockupConfig: {
+      sizes: [
+        { size: "S", chest: "86-90", waist: "70-74" },
+        { size: "M", chest: "90-94", waist: "74-78" },
+        { size: "L", chest: "94-98", waist: "78-82" },
+        { size: "XL", chest: "98-102", waist: "82-86" },
+      ],
+      unit: "cm",
+      helper: { height: "175", weight: "70", recommended: "M" },
+    },
+    platforms: ["ios", "android"],
+    severity: "high",
+    authorName: "ASOS / Zara",
+    categorySlug: "forms-input",
+    tagSlugs: ["high-dropoff", "error-prone", "clarity", "cross-platform"],
+    guidelines: [
+      {
+        title: "Always provide size guide for clothing",
+        body: "Size guide is mandatory for fashion e-commerce. Without it, 30%+ returns due to wrong size. Show measurements, not just S/M/L.",
+        source: "nielsen",
+      },
+      {
+        title: "Size calculator by body measurements",
+        body: "Provide a calculator where user enters height/weight and gets recommended size. Reduces returns by 25-40%.",
+        source: "material",
+      },
+    ],
+  },
+
+  // ===== QUANTITY STEPPER (forms-input) =====
+  {
+    slug: "quantity-stepper",
+    title: "Quantity stepper with stock awareness",
+    summary:
+      "Степпер количества с показом остатков и лимитов (min/max).",
+    description:
+      "Кнопки «-» «+» и число между. Под степпером — «В наличии: 7 шт». Если пользователь хочет 10, а есть 7 — кнопка «+» блокируется и показывается «Максимум: 7».",
+    problemStatement:
+      "Без показа остатков пользователь заказывает 10, а есть 7 — ошибка на checkout. Разочарование, abandon.",
+    solution: "Live stock awareness в stepper — пользователь видит лимиты сразу.",
+    pros: [
+      "Снижает checkout errors на 40%",
+      "Управляет ожиданиями",
+      "Чувство urgency при малых остатках",
+    ],
+    cons: ["Нужна real-time inventory интеграция"],
+    useCases: ["E-commerce", "Ticket booking", "Restaurant reservations"],
+    mockupType: "quantity-stepper",
+    mockupConfig: {
+      min: 1,
+      max: 7,
+      current: 1,
+      stock: 7,
+      stockLabel: "В наличии: 7 шт",
+    },
+    platforms: ["ios", "android"],
+    severity: "medium",
+    authorName: "Shopify / Amazon",
+    categorySlug: "forms-input",
+    tagSlugs: ["error-prone", "clarity", "friction-reduction", "cross-platform"],
+    guidelines: [
+      {
+        title: "Show stock count when low",
+        body: "When stock is low (<10), show exact count. Creates urgency and sets expectations. Don't show stock when high (>100).",
+        source: "nielsen",
+      },
+      {
+        title: "Block at max, don't show error after",
+        body: "Disable + button at stock limit. Don't let user enter more and show error on submit. Preventive > reactive.",
+        source: "material",
+      },
+    ],
+  },
+
+  // ===== CART PREVIEW DRAWER (checkout-payment) =====
+  {
+    slug: "cart-preview-drawer",
+    title: "Cart preview drawer (slide-in)",
+    summary:
+      "Drawer справа с превью корзины — список товаров, сумма, кнопка checkout.",
+    description:
+      "При тапе на иконку корзины — справа выезжает drawer на 350px. Содержит: список товаров (с количеством и возможностью изменить), subtotal, доставка, total, кнопка «Оформить». Без перехода на cart page.",
+    problemStatement:
+      "Переход на cart page для проверки = friction. Пользователь не хочет покидать каталог ради проверки корзины.",
+    solution: "Drawer — быстрый preview без потери контекста каталога.",
+    pros: [
+      "Сохраняет контекст пользователя",
+      "Быстрый доступ к корзине",
+      "Меньше page transitions",
+    ],
+    cons: ["Не подходит для мобильных (мало места)"],
+    useCases: ["E-commerce desktop", "SaaS с cart", "Food delivery"],
+    mockupType: "cart-preview-drawer",
+    mockupConfig: {
+      items: [
+        { name: "Nike Air Max 2024", variant: "42, Чёрный", qty: 1, price: "8 990 ₽" },
+        { name: "Носки sport x3", variant: "Размер M", qty: 2, price: "1 380 ₽" },
+      ],
+      subtotal: "10 370 ₽",
+      delivery: "Бесплатно",
+      total: "10 370 ₽",
+    },
+    platforms: ["ios", "android"],
+    severity: "medium",
+    authorName: "Amazon / Shopify",
+    categorySlug: "checkout-payment",
+    tagSlugs: ["friction-reduction", "clarity", "cross-platform"],
+    guidelines: [
+      {
+        title: "Drawer for desktop, page for mobile",
+        body: "Cart drawer works on desktop. On mobile, full cart page is better — drawer is too narrow for product list.",
+        source: "nielsen",
+      },
+      {
+        title: "Editable quantities in drawer",
+        body: "Let users edit quantities and remove items directly from drawer. Don't force them to checkout to change cart.",
+        source: "material",
+      },
+    ],
+  },
+
+  // ===== COUPON CODE INPUT (checkout-payment) =====
+  {
+    slug: "coupon-code-input",
+    title: "Coupon / promo code input with validation",
+    summary:
+      "Поле ввода промокода с inline валидацией и применением скидки.",
+    description:
+      "Поле «Промокод» + кнопка «Применить». При тапе — inline валидация: зелёный чек + «-10% применено» или красная ошибка «Промокод не найден». Скидка сразу видна в summary.",
+    problemStatement:
+      "Промокоды часто не работают — пользователь разочаровывается и abandons. Без inline validation ждёт до финального шага.",
+    solution: "Instant validation + показ скидки в summary.",
+    pros: [
+      "Меньше abandoned carts из-за промокодов",
+      "Позитивный feedback при успехе",
+      "Прозрачность цены",
+    ],
+    cons: ["Нужна быстрая API для validation"],
+    useCases: ["E-commerce", "Подписки", "SaaS trial", "Food delivery"],
+    mockupType: "coupon-code-input",
+    mockupConfig: {
+      placeholder: "Введите промокод",
+      validCodes: ["WELCOME10", "SUMMER20"],
+      applied: null,
+    },
+    platforms: ["ios", "android"],
+    severity: "low",
+    authorName: "Stripe / Shopify",
+    categorySlug: "checkout-payment",
+    tagSlugs: ["error-prone", "friction-reduction", "cross-platform"],
+    guidelines: [
+      {
+        title: "Validate coupon instantly",
+        body: "Validate coupon code as user types or immediately on Apply. Don't wait until checkout submit — users hate late surprises.",
+        source: "nielsen",
+      },
+      {
+        title: "Show discount in price summary",
+        body: "When coupon applied, immediately show discount line in price summary: '-10% (WELCOME10): -899 ₽'. Transparent.",
+        source: "material",
+      },
+    ],
+  },
+
+  // ===== BUNDLE CROSS SELL (checkout-payment) =====
+  {
+    slug: "bundle-cross-sell",
+    title: "Bundle / cross-sell (complementary products)",
+    summary:
+      "Комплект «купите вместе дешевле» — основной товар + аксессуары со скидкой.",
+    description:
+      "На PDP или cart — блок «С этим товаром покупают»: товар + 2-3 дополнения со скидкой 10-15% при покупке комплекта. Чекбоксы выбора, пересчёт суммы.",
+    problemStatement:
+      "Cross-sell через popups раздражает. Без cross-sell — упущенная выручка (AOV ниже).",
+    solution: "Bundle с реальной скидкой — пользователь видит выгоду, не раздражается.",
+    pros: [
+      "Увеличивает AOV на 15-30%",
+      "Полезно для пользователя (забыл купить)",
+      "Неинтрузивный cross-sell",
+    ],
+    cons: ["Нужна careful selection of bundle items"],
+    useCases: ["E-commerce", "SaaS upsell", "Travel (отель+перелёт)"],
+    mockupType: "bundle-cross-sell",
+    mockupConfig: {
+      mainProduct: { name: "iPhone 15 Pro", price: "99 990 ₽" },
+      bundleItems: [
+        { name: "Чехол", price: "2 990 ₽", bundledPrice: "1 990 ₽", selected: true },
+        { name: "Зарядка", price: "3 490 ₽", bundledPrice: "2 490 ₽", selected: true },
+        { name: "AirPods", price: "19 990 ₽", bundledPrice: "16 990 ₽", selected: false },
+      ],
+      discount: "10%",
+    },
+    platforms: ["ios", "android"],
+    severity: "low",
+    authorName: "Apple Store / McDonald's",
+    categorySlug: "checkout-payment",
+    tagSlugs: ["friction-reduction", "clarity", "cross-platform"],
+    guidelines: [
+      {
+        title: "Bundle with real discount, not upsell",
+        body: "Bundle should offer real discount on items user actually needs. Don't bundle random products — relevance is key.",
+        source: "nielsen",
+      },
+      {
+        title: "Let users opt out of individual items",
+        body: "Allow users to deselect individual bundle items. Forced bundles feel manipulative.",
+        source: "material",
+      },
+    ],
+  },
+
+  // ===== EMPTY CART WITH RECOMMENDATIONS (empty-states) =====
+  {
+    slug: "empty-cart-recommendations",
+    title: "Empty cart with recommendations",
+    summary:
+      "Пустая корзина + рекомендации популярных товаров — не тупик, а точка входа.",
+    description:
+      "При пустой корзине: иконка, «Ваша корзина пуста», «Добавьте товары из каталога» + горизонтальная карусель «Популярное сейчас» (5-7 товаров).",
+    problemStatement:
+      "Пустая корзина = тупик. Пользователь не знает куда дальше. Закрывает приложение.",
+    solution: "Превращаем empty cart в discovery moment.",
+    pros: ["Возвращает в funnel", "Увеличивает discovery", "Снижает bounce на 20-30%"],
+    cons: ["Нужна инфраструктура recommended products"],
+    useCases: ["E-commerce", "Food delivery", "Marketplace"],
+    mockupType: "empty-cart-recommendations",
+    mockupConfig: {
+      title: "Ваша корзина пуста",
+      body: "Добавьте товары из каталога — мы поможем выбрать",
+      cta: "Перейти в каталог",
+      recommendations: [
+        { name: "Nike Air Max", price: "8 990 ₽" },
+        { name: "Adidas T-shirt", price: "1 990 ₽" },
+        { name: "Часы Apple Watch", price: "29 990 ₽" },
+      ],
+    },
+    platforms: ["ios", "android"],
+    severity: "medium",
+    authorName: "Amazon / Ozon",
+    categorySlug: "empty-states",
+    tagSlugs: ["high-dropoff", "clarity", "friction-reduction", "cross-platform"],
+    guidelines: [
+      {
+        title: "Recommend products in empty cart",
+        body: "Don't show dead-end empty cart. Show recommended/trending products to bring user back into shopping flow.",
+        source: "nielsen",
+      },
+      {
+        title: "Make CTA prominent",
+        body: "Empty cart should have a prominent CTA to catalog. Don't make user hunt for how to add items.",
+        source: "material",
+      },
+    ],
+  },
+
+  // ===== WISHLIST FAVORITES (notifications-feedback) =====
+  {
+    slug: "wishlist-favorites",
+    title: "Wishlist / favorites",
+    summary:
+      "Иконка сердца на карточке товара — сохраняет в избранное для отложенной покупки.",
+    description:
+      "Иконка сердца на карточке товара. Тап → анимация fill + toast «Добавлено в избранное». Wishlist доступен из профиля. При снижении цены на wishlisted товар — push уведомление.",
+    problemStatement:
+      "Без wishlist пользователь либо покупает сразу (impulse), либо забывает товар. Conversion теряется на отложенных покупках.",
+    solution: "Wishlist — отложенная покупка + price drop notifications.",
+    pros: [
+      "Сохраняет intent-to-buy",
+      "Price drop notifications = высокий conversion",
+      "Стандарт e-commerce",
+    ],
+    cons: ["Нужна инфраструктура для price tracking"],
+    useCases: ["E-commerce", "Travel booking", "Real estate"],
+    mockupType: "wishlist-favorites",
+    mockupConfig: {
+      items: [
+        { name: "Nike Air Max 2024", price: "8 990 ₽", priceDropped: true, oldPrice: "11 990 ₽" },
+        { name: "Adidas Ultraboost", price: "12 490 ₽", priceDropped: false },
+        { name: "Apple Watch Series 9", price: "29 990 ₽", priceDropped: false },
+      ],
+    },
+    platforms: ["ios", "android"],
+    severity: "low",
+    authorName: "Pinterest / Amazon",
+    categorySlug: "notifications-feedback",
+    tagSlugs: ["friction-reduction", "clarity", "cross-platform"],
+    guidelines: [
+      {
+        title: "Notify on price drops",
+        body: "When price drops on wishlisted item, send push notification. Highest conversion channel for e-commerce.",
+        source: "nielsen",
+      },
+      {
+        title: "Heart icon universally recognized",
+        body: "Use heart icon for wishlist. Universally recognized across apps. Don't reinvent with custom icons.",
+        source: "material",
+      },
+    ],
+  },
+
+  // ===== SCARCITY URGENCY (notifications-feedback) =====
+  {
+    slug: "scarcity-urgency",
+    title: "Scarcity / urgency cues",
+    summary:
+      "«5 человек смотрят», «Осталось 2 шт» — индикаторы scarcity для urgency.",
+    description:
+      "На PDP: «X человек смотрят этот товар сейчас», «Осталось N шт», «Скидка действует до HH:MM». Реальные данные, не fake. Если fake — теряется trust.",
+    problemStatement:
+      "Без urgency пользователь откладывает покупку «подумаю» и забывает. Conversion теряется.",
+    solution: "Real scarcity cues — socially proven to increase conversion 15-30%.",
+    pros: ["Снижает procrastination", "Повышает conversion 15-30%", "Социальное доказательство"],
+    cons: ["Fake scarcity разрушает trust", "Regulatory concerns в EU"],
+    useCases: ["E-commerce", "Booking", "Ticket sales", "Limited offers"],
+    mockupType: "scarcity-urgency",
+    mockupConfig: {
+      viewersCount: 5,
+      stockLeft: 2,
+      discountEndsIn: "02:34:18",
+      recentPurchases: ["Анна из Москвы купила 5 мин назад", "Иван из СПб купил 12 мин назад"],
+    },
+    platforms: ["ios", "android"],
+    severity: "low",
+    authorName: "Booking.com / Amazon",
+    categorySlug: "notifications-feedback",
+    tagSlugs: ["friction-reduction", "clarity", "cross-platform"],
+    guidelines: [
+      {
+        title: "Only real scarcity, never fake",
+        body: "Fake scarcity ('Only 1 left!' when there are 50) destroys trust. Use real data or don't show scarcity at all.",
+        source: "nielsen",
+      },
+      {
+        title: "Pair scarcity with CTA",
+        body: "Scarcity message should be near Add to Cart button. Distance reduces effect.",
+        source: "material",
+      },
+    ],
+  },
+
+  // ===== OUT OF STOCK RECOVERY (errors-recovery) =====
+  {
+    slug: "out-of-stock-recovery",
+    title: "Out of stock recovery",
+    summary:
+      "Товара нет в наличии → похожие товары + подписка на появление.",
+    description:
+      "Когда товар out of stock: баннер «Нет в наличии», кнопка «Сообщить о появлении» (email подписка), блок «Похожие товары» (3-4 альтернативы), «Выбрать другой размер/цвет».",
+    problemStatement:
+      "Out of stock = конец funnel. Пользователь уходит к конкурентам, не зная об альтернативах.",
+    solution: "Recovery через похожие + подписку на возврат.",
+    pros: [
+      "Сохраняет sale через альтернативы",
+      "Email capture для future marketing",
+      "Снижает bounce на 25-35%",
+    ],
+    cons: ["Нужна good recommendation engine"],
+    useCases: ["E-commerce", "Booking", "Ticket sales"],
+    mockupType: "out-of-stock-recovery",
+    mockupConfig: {
+      productName: "Nike Air Max 2024",
+      variant: "42 размер, Чёрный",
+      alternatives: [
+        { name: "Nike Air Max 2023", price: "7 990 ₽", available: true },
+        { name: "Adidas Ultraboost", price: "12 490 ₽", available: true },
+        { name: "Nike Pegasus 40", price: "8 490 ₽", available: true },
+      ],
+    },
+    platforms: ["ios", "android"],
+    severity: "high",
+    authorName: "Amazon / ASOS",
+    categorySlug: "errors-recovery",
+    tagSlugs: ["high-dropoff", "clarity", "friction-reduction", "cross-platform"],
+    guidelines: [
+      {
+        title: "Always offer alternatives when out of stock",
+        body: "Don't just say 'out of stock'. Show similar available products. Captures sale that would otherwise be lost.",
+        source: "nielsen",
+      },
+      {
+        title: "Email signup for restock notification",
+        body: "Offer 'notify when available' with email signup. Captures lead and brings user back when item returns.",
+        source: "material",
+      },
+    ],
+  },
 ];
 
 async function main() {
