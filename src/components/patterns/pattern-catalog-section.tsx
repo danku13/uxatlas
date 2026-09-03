@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, getLocale } from 'next-intl/server';
 import { PatternCatalogClient } from './pattern-catalog-client';
 
 /**
@@ -16,13 +16,13 @@ import { PatternCatalogClient } from './pattern-catalog-client';
  */
 export async function PatternCatalogSection() {
   const t = await getTranslations('Catalog');
+  const locale = (await getLocale()) as 'ru' | 'en';
 
   // Read count directly from /content/ Markdown files — no DB, no fetch.
-  // Works on Vercel, serverless, anywhere.
   let totalPatterns = 31; // sensible fallback
   try {
     const { getPatterns } = await import('@/lib/content');
-    totalPatterns = getPatterns().filter(
+    totalPatterns = getPatterns(locale).filter(
       (p) => p.published && p.moderationStatus === 'approved',
     ).length;
   } catch {

@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { useQuery, keepPreviousData } from '@tanstack/react-query';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { Search, X, SlidersHorizontal, ArrowLeft, ArrowRight } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
@@ -105,6 +105,7 @@ export function PatternCatalogClient() {
   const pathname = usePathname();
   const sp = useSearchParams();
   const t = useTranslations('Catalog');
+  const locale = useLocale() as "ru" | "en";
 
   // Hydrate initial filter state from URL params (one-time read).
   const [filters, setFilters] = React.useState<CatalogFilters>(() =>
@@ -115,6 +116,7 @@ export function PatternCatalogClient() {
   const apiParams = React.useMemo(() => {
     const p = new URLSearchParams();
     p.set('pageSize', String(PAGE_SIZE));
+    p.set('locale', locale);
     if (filters.q.trim()) p.set('q', filters.q.trim());
     if (filters.categorySlug) p.set('categorySlug', filters.categorySlug);
     if (filters.severities.length > 0) p.set('severity', filters.severities.join(','));
@@ -123,7 +125,7 @@ export function PatternCatalogClient() {
     p.set('sort', filters.sort);
     p.set('page', String(filters.page));
     return p.toString();
-  }, [filters]);
+  }, [filters, locale]);
 
   // ---- Fetch patterns via TanStack Query ----
   const { data, isLoading, isFetching, isError } = useQuery<
@@ -143,7 +145,7 @@ export function PatternCatalogClient() {
   const { data: categories = [] } = useQuery<CategoryDTO[]>({
     queryKey: ['categories'],
     queryFn: async () => {
-      const res = await fetch('/api/categories');
+      const res = await fetch(`/api/categories?locale=${locale}`);
       if (!res.ok) return [];
       const data = (await res.json()) as CategoryDTO[] | { items: CategoryDTO[] };
       return Array.isArray(data) ? data : data.items ?? [];

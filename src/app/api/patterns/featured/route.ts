@@ -1,21 +1,22 @@
 import { NextResponse } from "next/server";
-import { getPatterns, toPatternDTO, type Severity } from "@/lib/content";
+import { getPatterns, toPatternDTO, type Locale, type Severity } from "@/lib/content";
 import type { PatternDTO } from "@/lib/types";
 
-// GET /api/patterns/featured
+// GET /api/patterns/featured?locale=ru|en
 // Returns up to 6 high-severity patterns for the homepage hero.
-// Reads from /content/ — no DB needed.
-export const dynamic = "force-static";
-
-const SEVERITY_RANK: Record<Severity, number> = {
-  high: 0,
-  medium: 1,
-  low: 2,
-};
-
-export async function GET(): Promise<Response> {
+export async function GET(req: Request): Promise<Response> {
   try {
-    const all = getPatterns().filter(
+    const url = new URL(req.url);
+    const localeParam = url.searchParams.get("locale") as Locale | null;
+    const locale: Locale = localeParam === "en" ? "en" : "ru";
+
+    const SEVERITY_RANK: Record<Severity, number> = {
+      high: 0,
+      medium: 1,
+      low: 2,
+    };
+
+    const all = getPatterns(locale).filter(
       (p) =>
         p.published &&
         p.moderationStatus === "approved" &&
@@ -29,7 +30,7 @@ export async function GET(): Promise<Response> {
       return a.slug.localeCompare(b.slug);
     });
 
-    const items: PatternDTO[] = sorted.slice(0, 6).map(toPatternDTO);
+    const items: PatternDTO[] = sorted.slice(0, 6).map((p) => toPatternDTO(p, locale));
     return NextResponse.json({ items });
   } catch (err) {
     console.error("[GET /api/patterns/featured] failed:", err);

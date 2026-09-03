@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, getLocale } from 'next-intl/server';
 
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
@@ -103,10 +103,10 @@ function getAccent(token: string | null): AccentClasses {
 /*  Reads directly from /content/ Markdown files via lib/content — no DB,     */
 /*  no HTTP fetch. Works on Vercel, serverless, anywhere.                     */
 /* -------------------------------------------------------------------------- */
-async function fetchCategories(): Promise<Category[]> {
+async function fetchCategories(locale: 'ru' | 'en'): Promise<Category[]> {
   try {
     const { getCategoriesDTO } = await import('@/lib/content');
-    return getCategoriesDTO();
+    return getCategoriesDTO(locale);
   } catch {
     return [];
   }
@@ -192,7 +192,8 @@ function CategoryCard({
 
 export async function CategoriesSection() {
   const t = await getTranslations('Categories');
-  const categories = await fetchCategories();
+  const locale = (await getLocale()) as 'ru' | 'en';
+  const categories = await fetchCategories(locale);
 
   return (
     <section id="categories" className="border-b">

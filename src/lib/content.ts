@@ -1,20 +1,23 @@
 /**
- * lib/content.ts — Content reader.
+ * lib/content.ts — Content reader with locale support.
  *
  * Reads from the auto-generated `content-data.generated.ts` module (which is
  * bundled into the serverless deployment — no `node:fs` calls at runtime).
  *
+ * All functions accept an optional `locale` parameter ('ru' | 'en').
+ * When locale='en', pattern titles/summaries and category names/descriptions
+ * are replaced with English translations (from content/translations/*.en.json).
+ * Falls back to Russian (original) if translation is missing.
+ *
  * To regenerate the data after editing /content/ Markdown files:
  *   bun run content:generate
- *
- * Used by:
- *   - API routes (/api/categories, /api/tags, /api/patterns, /api/patterns/[slug])
- *   - Server components (HeroSection, CategoriesSection, PatternCatalogSection)
  */
 import {
   CATEGORIES,
   TAGS,
   PATTERNS,
+  CATEGORIES_EN,
+  PATTERNS_EN,
 } from './content-data.generated';
 import type {
   Category,
@@ -27,6 +30,7 @@ import type {
 
 // Re-export types so consumers can import them from '@/lib/content'
 export type { Category, Tag, Pattern, Severity, GuidelineSource, Guideline };
+export type Locale = 'ru' | 'en';
 
 // ---------------------------------------------------------------------------
 // DTOs (matching the old Prisma-based API contract — kept for compatibility)
@@ -81,10 +85,48 @@ function slugId(slug: string, prefix = 'cnt'): string {
 }
 
 // ---------------------------------------------------------------------------
-// Readers (use the pre-generated data — no fs.readFileSync at runtime)
+// Translation helpers
 // ---------------------------------------------------------------------------
 
-export function getCategories(): Category[] {
+/** Get localized category name (fallback to Russian if EN missing). */
+function localizedCategoryName(c: Category, locale: Locale): string {
+  if (locale === 'en') {
+    return CATEGORIES_EN[c.slug]?.name ?? c.name;
+  }
+  return c.name;
+}
+
+/** Get localized category description (fallback to Russian if EN missing). */
+function localizedCategoryDescription(c: Category, locale: Locale): string {
+  if (locale === 'en') {
+    return CATEGORIES_EN[c.slug]?.description ?? c.description;
+  }
+  return c.description;
+}
+
+/** Get localized pattern (title + summary translated if EN). */
+function localizedPattern(p: Pattern, locale: Locale): Pattern {
+  if (locale === 'en') {
+    const en = PATTERNS_EN.find((e) => e.slug === p.slug);
+    if (en) {
+      return { ...p, title: en.title, summary: en.summary };
+    }
+  }
+  return p;
+}
+
+// ---------------------------------------------------------------------------
+// Readers (use the pre-generated data — no fs at runtime)
+// ---------------------------------------------------------------------------
+
+export function getCategories(locale: Locale = 'ru'): Category[] {
+  if (locale === 'en') {
+    return CATEGORIES.map((c) => ({
+      ...c,
+      name: CATEGORIES_EN[c.slug]?.name ?? c.name,
+      description: CATEGORIES_EN[c.slug]?.description ?? c.description,
+    }));
+  }
   return CATEGORIES;
 }
 
@@ -92,28 +134,36 @@ export function getTags(): Tag[] {
   return TAGS;
 }
 
-export function getPatterns(): Pattern[] {
+export function getPatterns(locale: Locale = 'ru'): Pattern[] {
+  if (locale === 'en') {
+    return PATTERNS.map((p) => {
+      const en = PATTERNS_EN.find((e) => e.slug === p.slug);
+      return en ? { ...p, title: en.title, summary: en.summary } : p;
+    });
+  }
   return PATTERNS;
 }
 
-export function getPatternBySlug(slug: string): Pattern | null {
-  return PATTERNS.find((p) => p.slug === slug) ?? null;
+export function getPatternBySlug(slug: string, locale: Locale = 'ru'): Pattern | null {
+  const p = PATTERNS.find((p) => p.slug === slug);
+  if (!p) return null;
+  return localizedPattern(p, locale);
 }
 
-export function getPatternsByCategory(categorySlug: string): Pattern[] {
-  return PATTERNS.filter((p) => p.categorySlug === categorySlug);
+export function getPatternsByCategory(categorySlug: string, locale: Locale = 'ru'): Pattern[] {
+  return getPatterns(locale).filter((p) => p.categorySlug === categorySlug);
 }
 
 // ---------------------------------------------------------------------------
 // DTO builders
 // ---------------------------------------------------------------------------
 
-export function getCategoriesDTO(): CategoryDTO[] {
+export function getCategoriesDTO(locale: Locale = 'ru'): CategoryDTO[] {
   return CATEGORIES.map((c) => ({
     id: slugId(c.slug, 'cat'),
     slug: c.slug,
-    name: c.name,
-    description: c.description || null,
+    name: localizedCategoryName(c, locale),
+    description: localizedCategoryDescription(c, locale) || null,
     icon: c.icon || null,
     accent: c.accent || null,
     order: c.order,
@@ -140,13 +190,14 @@ export function getTagsDTO(): TagDTO[] {
   })).sort((a, b) => a.name.localeCompare(b.name));
 }
 
-export function toPatternDTO(p: Pattern): PatternDTO {
+export function toPatternDTO(p: Pattern, locale: Locale = 'ru'): PatternDTO {
   const cat = CATEGORIES.find((c) => c.slug === p.categorySlug);
+  const localized = localizedPattern(p, locale);
   return {
     id: slugId(p.slug, 'pat'),
     slug: p.slug,
-    title: p.title,
-    summary: p.summary,
+    title: localized.title,
+    summary: localized.summary,
     description: p.description,
     problemStatement: p.problemStatement,
     solution: p.solution,
@@ -162,7 +213,7 @@ export function toPatternDTO(p: Pattern): PatternDTO {
     category: {
       id: cat ? slugId(cat.slug, 'cat') : '',
       slug: p.categorySlug,
-      name: cat?.name ?? p.categorySlug,
+      name: cat ? localizedCategoryName(cat, locale) : p.categorySlug,
       icon: cat?.icon ? cat.icon : null,
       accent: cat?.accent ? cat.accent : null,
     },
@@ -173,9 +224,9 @@ export function toPatternDTO(p: Pattern): PatternDTO {
   };
 }
 
-export function toPatternDetailDTO(p: Pattern): PatternDetailDTO {
+export function toPatternDetailDTO(p: Pattern, locale: Locale = 'ru'): PatternDetailDTO {
   return {
-    ...toPatternDTO(p),
+    ...toPatternDTO(p, locale),
     guidelines: p.guidelines.map((g, i) => ({
       id: slugId(`${p.slug}-${i}`, 'guide'),
       title: g.title,

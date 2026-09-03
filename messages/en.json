@@ -34,7 +34,31 @@
     "badge": "Browse by drop-off point",
     "title": "Where users leave — and the patterns that bring them back",
     "subtitle": "Each category corresponds to a drop-off point in the user journey: from first launch to settings and permissions.",
-    "patternsCount": "{count} pattern | {count} patterns | {count} patterns"
+    "patternsCount": "{count} pattern | {count} patterns | {count} patterns",
+    "names": {
+      "onboarding": "Onboarding & first launch",
+      "authentication": "Sign up & authentication",
+      "search-discovery": "Search & discovery",
+      "forms-input": "Forms & data input",
+      "checkout-payment": "Checkout & payment",
+      "errors-recovery": "Errors & recovery",
+      "empty-states": "Empty states",
+      "loading-waiting": "Loading & waiting",
+      "notifications-feedback": "Notifications & feedback",
+      "settings-permissions": "Settings & permissions"
+    },
+    "descriptions": {
+      "onboarding": "Where users don't understand the value and leave before activation.",
+      "authentication": "Where complex forms, passwords and frustration kill conversion.",
+      "search-discovery": "Where users can't find what they're looking for and close the app.",
+      "forms-input": "Where validation, masks and long fields cause frustration.",
+      "checkout-payment": "Where carts are abandoned due to unexpected steps and card errors.",
+      "errors-recovery": "Where \"it broke\" — and users don't know what to do next.",
+      "empty-states": "Where \"it's empty here\" — and users think the app is broken.",
+      "loading-waiting": "Where long loading feels like \"frozen\" — and users leave.",
+      "notifications-feedback": "Where notification spam leads to push opt-out or app uninstall.",
+      "settings-permissions": "Where complex settings and unclear permissions scare users."
+    }
   },
   "Catalog": {
     "badge": "Catalog",

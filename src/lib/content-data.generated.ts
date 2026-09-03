@@ -4728,3 +4728,404 @@ export const PATTERNS: Pattern[] = [
     "createdAt": "2025-01-01T00:00:00.000Z"
   }
 ];
+
+export const CATEGORIES_EN: Record<string, { name: string; description: string }> = {
+  "onboarding": {
+    "name": "Onboarding & first launch",
+    "description": "Where users don't understand the value and leave before activation."
+  },
+  "authentication": {
+    "name": "Sign up & authentication",
+    "description": "Where complex forms, passwords and frustration kill conversion."
+  },
+  "search-discovery": {
+    "name": "Search & discovery",
+    "description": "Where users can't find what they're looking for and close the app."
+  },
+  "forms-input": {
+    "name": "Forms & data input",
+    "description": "Where validation, masks and long fields cause frustration."
+  },
+  "checkout-payment": {
+    "name": "Checkout & payment",
+    "description": "Where carts are abandoned due to unexpected steps and card errors."
+  },
+  "errors-recovery": {
+    "name": "Errors & recovery",
+    "description": "Where \"it broke\" — and users don't know what to do next."
+  },
+  "empty-states": {
+    "name": "Empty states",
+    "description": "Where \"it's empty here\" — and users think the app is broken."
+  },
+  "loading-waiting": {
+    "name": "Loading & waiting",
+    "description": "Where long loading feels like \"frozen\" — and users leave."
+  },
+  "notifications-feedback": {
+    "name": "Notifications & feedback",
+    "description": "Where notification spam leads to push opt-out or app uninstall."
+  },
+  "settings-permissions": {
+    "name": "Settings & permissions",
+    "description": "Where complex settings and unclear permissions scare users."
+  }
+};
+
+export const PATTERNS_EN: { slug: string; title: string; summary: string }[] = [
+  {
+    "slug": "product-filter-facets",
+    "title": "Product filter facets with counts",
+    "summary": "Filters with preview of product count in each option (Sneakers [231])."
+  },
+  {
+    "slug": "scarcity-urgency",
+    "title": "Scarcity / urgency cues",
+    "summary": "\"5 people are viewing\", \"Only 2 left left\" — scarcity indicators for urgency."
+  },
+  {
+    "slug": "variant-selection",
+    "title": "Variant selection (color, size)",
+    "summary": "Product variant selection with visual swatches: color as circles, size as buttons."
+  },
+  {
+    "slug": "save-card-tokenized",
+    "title": "Save card (tokenized, secure)",
+    "summary": "Secure card saving through tokenization — no need to enter data on next login."
+  },
+  {
+    "slug": "wishlist-favorites",
+    "title": "Wishlist / favorites",
+    "summary": "Heart icon on product card — saves to favorites for later purchase."
+  },
+  {
+    "slug": "error-empty-state",
+    "title": "Error empty state (distinct from no-data)",
+    "summary": "Clearly distinguish \"no data\" from \"loading error\" — different icons, text, and CTAs."
+  },
+  {
+    "slug": "form-conflict-resolution",
+    "title": "Form conflict resolution (optimistic locking)",
+    "summary": "During simultaneous editing — show conflict and offer merge options."
+  },
+  {
+    "slug": "grouped-settings-with-explanations",
+    "title": "Grouped settings with explanations",
+    "summary": "Settings grouped by meaning, each with a brief explanation of its purpose."
+  },
+  {
+    "slug": "voice-search",
+    "title": "Voice search",
+    "summary": "Voice input for queries — microphone icon in search bar."
+  },
+  {
+    "slug": "first-time-empty-tutorial",
+    "title": "First-time empty state with tutorial",
+    "summary": "On first visit — empty screen with pulsing coach marks pointing to key actions."
+  },
+  {
+    "slug": "staggered-content-reveal",
+    "title": "Staggered content reveal",
+    "summary": "List elements appear sequentially with a delay for smooth loading."
+  },
+  {
+    "slug": "inbox-zero-celebration",
+    "title": "Inbox zero celebration",
+    "summary": "A positive empty state when 'everything is done' — a celebration instead of 'no data'."
+  },
+  {
+    "slug": "permission-rerequest-flow",
+    "title": "Permission re-request flow",
+    "summary": "If the user previously denied permission — guide them to system settings with an explanation of why it's needed."
+  },
+  {
+    "slug": "bundle-cross-sell",
+    "title": "Bundle / cross-sell (complementary products)",
+    "summary": "Buy together cheaper bundle — main product + discounted accessories."
+  },
+  {
+    "slug": "account-deletion-flow",
+    "title": "Account deletion flow with grace period",
+    "summary": "Account deletion with a 30-day grace period — can be restored at any time."
+  },
+  {
+    "slug": "biometric-auth",
+    "title": "Biometric authentication (Face ID)",
+    "summary": "Login via Face ID / Touch ID — instant authentication without password entry."
+  },
+  {
+    "slug": "retry-with-status",
+    "title": "Retry with progressive status",
+    "summary": "Retry button with progress: 'Connecting...' → 'Loading data...' → 'Done'."
+  },
+  {
+    "slug": "skip-onboarding-restore",
+    "title": "Skip-able onboarding with restore hint",
+    "summary": "Allow skipping onboarding, but offer to complete it later from settings."
+  },
+  {
+    "slug": "empty-cart-recommendations",
+    "title": "Empty cart with recommendations",
+    "summary": "Empty cart + popular product recommendations — not a dead end, but an entry point."
+  },
+  {
+    "slug": "autosave-draft",
+    "title": "Autosave draft",
+    "summary": "Long forms are automatically saved — user can return later."
+  },
+  {
+    "slug": "express-checkout",
+    "title": "Express checkout (Apple/Google Pay)",
+    "summary": "One-click payment button without card and address data entry — all information is already in the system."
+  },
+  {
+    "slug": "page-not-found-recovery",
+    "title": "404 / page not found recovery",
+    "summary": "404 page with navigation — not a dead end, but a point of entry."
+  },
+  {
+    "slug": "guest-checkout",
+    "title": "Guest checkout (no account required)",
+    "summary": "Ability to purchase without mandatory registration — the main factor in reducing cart abandonment."
+  },
+  {
+    "slug": "destructive-action-confirm",
+    "title": "Destructive action confirmation",
+    "summary": "Confirmation for irreversible actions (delete, clear) with explicit explanation."
+  },
+  {
+    "slug": "passkey-auth",
+    "title": "Passkey / WebAuthn authentication",
+    "summary": "Login via passkey — passwordless authentication with device cryptography. More secure than a password, more convenient."
+  },
+  {
+    "slug": "session-expired-recovery",
+    "title": "Session expired recovery",
+    "summary": "When session expires — clear message and quick recovery button."
+  },
+  {
+    "slug": "cart-preview-drawer",
+    "title": "Cart preview drawer (slide-in)",
+    "summary": "Right-side drawer with cart preview — product list, total amount, checkout button."
+  },
+  {
+    "slug": "quantity-stepper",
+    "title": "Quantity stepper with stock awareness",
+    "summary": "Quantity stepper with stock display and limits (min/max)."
+  },
+  {
+    "slug": "price-range-slider",
+    "title": "Price range slider (dual handle)",
+    "summary": "Slider with dual handles for price range selection — visual and precise."
+  },
+  {
+    "slug": "sort-dropdown",
+    "title": "Sort dropdown (relevance, price, rating)",
+    "summary": "Sorting dropdown: popular, price↑/↓, new items, rating."
+  },
+  {
+    "slug": "offline-mode-cached",
+    "title": "Offline mode with cached data",
+    "summary": "When offline — display cached data with an 'Offline' banner and a 'Retry' button."
+  },
+  {
+    "slug": "swipe-to-delete-undo",
+    "title": "Swipe-to-delete with undo",
+    "summary": "Swipe left to delete + snackbar with undo option within 5 seconds."
+  },
+  {
+    "slug": "skeleton-screens",
+    "title": "Skeleton screens",
+    "summary": "While data loads — show gray content placeholders instead of a spinner."
+  },
+  {
+    "slug": "inline-validation",
+    "title": "Inline validation (real-time)",
+    "summary": "Field validation as users type with specific feedback, not just on submit."
+  },
+  {
+    "slug": "order-summary-delivery",
+    "title": "Order summary with delivery estimate",
+    "summary": "Before checkout — card with address, delivery estimate, and full price breakdown."
+  },
+  {
+    "slug": "size-guide-picker",
+    "title": "Size guide with measurements",
+    "summary": "Size chart with measurements + fitting assistant based on height/weight."
+  },
+  {
+    "slug": "recently-viewed",
+    "title": "Recently viewed carousel",
+    "summary": "Horizontal carousel of recently viewed items — on homepage and in catalog empty states."
+  },
+  {
+    "slug": "passwordless-magic-link",
+    "title": "Passwordless / Magic link auth",
+    "summary": "Passwordless login: user enters email and clicks a link. No password friction."
+  },
+  {
+    "slug": "one-screen-per-step",
+    "title": "One-screen-per-step wizard",
+    "summary": "Long forms broken into screens with one question per screen and a progress bar."
+  },
+  {
+    "slug": "feature-tour-overlay",
+    "title": "Feature tour overlay",
+    "summary": "Semi-transparent overlay highlighting 3-5 key features after first login."
+  },
+  {
+    "slug": "abandoned-cart-recovery",
+    "title": "Abandoned cart recovery",
+    "summary": "Push/email with a link to the abandoned cart is the main recovery strategy."
+  },
+  {
+    "slug": "inline-progress-percentage",
+    "title": "Inline progress with percentage and ETA",
+    "summary": "For long operations — a progress bar with percentages and estimated time of arrival."
+  },
+  {
+    "slug": "account-recovery",
+    "title": "Account recovery flow",
+    "summary": "Clear account recovery flow: method selection (email/SMS/backup), confirmation, new password."
+  },
+  {
+    "slug": "conditional-fields",
+    "title": "Conditional fields (progressive disclosure)",
+    "summary": "Fields appear only when needed: select 'courier delivery' → address field appears."
+  },
+  {
+    "slug": "search-no-results-extended",
+    "title": "Search no results — extended recovery",
+    "summary": "Extended search empty state: similar queries + categories + subscription."
+  },
+  {
+    "slug": "pull-to-refresh-feedback",
+    "title": "Pull-to-refresh with feedback",
+    "summary": "Swipe down to refresh content with clear status indication."
+  },
+  {
+    "slug": "optimistic-ui",
+    "title": "Optimistic UI",
+    "summary": "When a user performs an action (like, comment), the UI updates instantly before server confirmation."
+  },
+  {
+    "slug": "sticky-search-suggestions",
+    "title": "Sticky search with suggestions",
+    "summary": "Search is always accessible, showing popular queries, history, and suggestions on focus."
+  },
+  {
+    "slug": "snackbar-with-action",
+    "title": "Snackbar with action button",
+    "summary": "Temporary strip at the bottom with a message and action button (Undo, Retry)."
+  },
+  {
+    "slug": "recent-trending-tabs",
+    "title": "Recent + Trending tabs in search",
+    "summary": "In empty search state — 2 tabs: Recent queries and Trending now."
+  },
+  {
+    "slug": "out-of-stock-recovery",
+    "title": "Out of stock recovery",
+    "summary": "Product unavailable → similar products + notification for restock."
+  },
+  {
+    "slug": "dark-mode-toggle",
+    "title": "Dark mode (system / light / dark)",
+    "summary": "3 theme options: system, light, dark — with preview and instant application."
+  },
+  {
+    "slug": "inline-recoverable-errors",
+    "title": "Inline + recoverable errors",
+    "summary": "Errors shown in context of the field, always with a clear path to recovery."
+  },
+  {
+    "slug": "file-upload-preview",
+    "title": "File upload with preview",
+    "summary": "File upload with progress, preview, and ability to replace/delete."
+  },
+  {
+    "slug": "time-to-value-progress",
+    "title": "Time-to-value progress indicator",
+    "summary": "Progress to first meaningful action: \"2 of 3 steps to first order\"."
+  },
+  {
+    "slug": "haptic-feedback",
+    "title": "Haptic feedback on actions",
+    "summary": "Haptic feedback on actions — like, swipe, confirmation, error."
+  },
+  {
+    "slug": "empty-search-state",
+    "title": "Actionable empty search state",
+    "summary": "When search finds nothing — show alternatives, popular queries, and CTA instead of just \"nothing found\"."
+  },
+  {
+    "slug": "smart-defaults-autofill",
+    "title": "Smart defaults & autofill",
+    "summary": "Pre-fill fields with default values and use system autofill for address and card."
+  },
+  {
+    "slug": "permission-priming",
+    "title": "Permission priming (pre-request)",
+    "summary": "Before system permission dialog, show custom screen explaining why permission is needed."
+  },
+  {
+    "slug": "permission-status-dashboard",
+    "title": "Permission status dashboard",
+    "summary": "Single screen showing status of all permissions: granted/denied + quick access to settings."
+  },
+  {
+    "slug": "value-first-carousel",
+    "title": "Value-first onboarding carousel",
+    "summary": "3 screens of value before any action: showing what the user will get, not what they need to do."
+  },
+  {
+    "slug": "quick-view-modal",
+    "title": "Quick view modal",
+    "summary": "Product viewing without navigating to the detail page — a modal with key information."
+  },
+  {
+    "slug": "blur-up-image-loading",
+    "title": "Blur-up image loading",
+    "summary": "Blurry preview first, then sharp image — perceived as instant loading."
+  },
+  {
+    "slug": "coupon-code-input",
+    "title": "Coupon / promo code input with validation",
+    "summary": "Promo code input field with inline validation and discount application."
+  },
+  {
+    "slug": "in-app-notification-center",
+    "title": "In-app notification center",
+    "summary": "Bell icon with unread badge → dropdown with recent notifications list."
+  },
+  {
+    "slug": "actionable-empty-state",
+    "title": "Actionable empty state",
+    "summary": "When no data exists — display icon, explanation, and CTA to create the first item."
+  },
+  {
+    "slug": "personalization-survey",
+    "title": "Personalization survey onboarding",
+    "summary": "Short 3-5 question survey during onboarding — customizes content for the user."
+  },
+  {
+    "slug": "progressive-onboarding",
+    "title": "Progressive onboarding (in-context hints)",
+    "summary": "Teaching users in context — highlighting features when they first appear, not upfront."
+  },
+  {
+    "slug": "search-filters-sheet",
+    "title": "Search filters as bottom sheet",
+    "summary": "Quick filter chips at the top, full filter set in bottom sheet on tap."
+  },
+  {
+    "slug": "smart-input-masks",
+    "title": "Smart input masks (phone, card)",
+    "summary": "Auto-formatting input by mask: phone +7 (XXX) XXX-XX-XX, card XXXX XXXX XXXX XXXX."
+  },
+  {
+    "slug": "inline-payment-errors",
+    "title": "Inline payment errors with recovery",
+    "summary": "Payment errors are displayed inline with a specific reason and CTA to resolve the issue."
+  }
+];

@@ -3,20 +3,16 @@ import { z } from "zod";
 import {
   getPatterns,
   toPatternDTO,
-  type Pattern,
+  type Locale,
   type Severity,
 } from "@/lib/content";
 import { sendTelegramNotification, checkRateLimit, getClientIp } from "@/lib/telegram";
 import type { Paginated, PatternDTO } from "@/lib/types";
 
 // ---------------------------------------------------------------------------
-// GET /api/patterns — list with filter / search / pagination / sort
+// GET /api/patterns?locale=ru|en — list with filter / search / pagination / sort
 // Reads from /content/ Markdown files. No database needed — works on Vercel.
 // ---------------------------------------------------------------------------
-
-// This route handles query params (page, pageSize, q, severity, etc.) so it
-// must remain dynamic. Don't add `force-static` here — it would break query
-// parsing on Vercel.
 
 const SEVERITIES = ["high", "medium", "low"] as const;
 const PLATFORMS = ["ios", "android"] as const;
@@ -37,6 +33,7 @@ type ListQuery = {
   page: number;
   pageSize: number;
   sort: (typeof SORTS)[number];
+  locale: Locale;
 };
 
 function parseListQuery(url: URL): ListQuery {
@@ -72,6 +69,9 @@ function parseListQuery(url: URL): ListQuery {
       ? (sortRaw as (typeof SORTS)[number])
       : "newest";
 
+  const localeParam = sp.get("locale");
+  const locale: Locale = localeParam === "en" ? "en" : "ru";
+
   return {
     q: sp.get("q")?.trim() || undefined,
     categorySlug: sp.get("categorySlug")?.trim() || undefined,
@@ -81,10 +81,11 @@ function parseListQuery(url: URL): ListQuery {
     page,
     pageSize,
     sort,
+    locale,
   };
 }
 
-function matchesFilters(p: Pattern, q: ListQuery): boolean {
+function matchesFilters(p: ReturnType<typeof getPatterns>[number], q: ListQuery): boolean {
   if (!p.published || p.moderationStatus !== "approved") return false;
   if (q.categorySlug && p.categorySlug !== q.categorySlug) return false;
   if (q.severity && !q.severity.includes(p.severity)) return false;
@@ -103,26 +104,24 @@ function matchesFilters(p: Pattern, q: ListQuery): boolean {
 export async function GET(req: Request): Promise<Response> {
   try {
     const q = parseListQuery(new URL(req.url));
-    const all = getPatterns();
+    const all = getPatterns(q.locale);
 
     const filtered = all.filter((p) => matchesFilters(p, q));
     const total = filtered.length;
     const totalPages = Math.max(1, Math.ceil(total / q.pageSize));
 
-    // Sort
     const sorted = [...filtered].sort((a, b) => {
       if (q.sort === "severity") {
         const sa = SEVERITY_RANK[a.severity] ?? 99;
         const sb = SEVERITY_RANK[b.severity] ?? 99;
         if (sa !== sb) return sa - sb;
       }
-      // Stable tiebreaker: slug alphabetical (deterministic, no time-based)
       return a.slug.localeCompare(b.slug);
     });
 
     const start = (q.page - 1) * q.pageSize;
     const slice = sorted.slice(start, start + q.pageSize);
-    const items: PatternDTO[] = slice.map(toPatternDTO);
+    const items: PatternDTO[] = slice.map((p) => toPatternDTO(p, q.locale));
 
     const body: Paginated<PatternDTO> = {
       items,
@@ -143,8 +142,7 @@ export async function GET(req: Request): Promise<Response> {
 
 // ---------------------------------------------------------------------------
 // POST /api/patterns — public submission (pending moderation)
-// On Vercel/serverless without DB, returns 503 Service Unavailable
-// (submissions need a persistent storage; reads work via /content/)
+// On Vercel/serverless without DB, sends Telegram notification instead.
 // ---------------------------------------------------------------------------
 
 const guidelineInputSchema = z.object({
@@ -155,8 +153,6 @@ const guidelineInputSchema = z.object({
 
 const createPatternSchema = z.object({
   // Honeypot field — bots fill this in, humans don't (it's visually hidden).
-  // If present and non-empty, the submission is silently rejected (200 returned
-  // so the bot thinks it succeeded, but no notification is sent).
   website: z.string().optional(),
   title: z.string().trim().min(3).max(100),
   summary: z.string().trim().min(10).max(200),
@@ -209,9 +205,7 @@ export async function POST(req: Request): Promise<Response> {
   }
 
   try {
-    // ── Honeypot check ──────────────────────────────────────────────────
-    // If the hidden "website" field is filled in, this is a bot.
-    // Silently return success so bots don't retry — no Telegram notification.
+    // ── Honeypot check ──
     if (parsed.website && parsed.website.trim().length > 0) {
       return NextResponse.json(
         { id: "spam_honeypot", slug: "spam", title: parsed.title },
@@ -219,60 +213,38 @@ export async function POST(req: Request): Promise<Response> {
       );
     }
 
-    // ── Rate limit check ──────────────────────────────────────────────
+    // ── Rate limit check ──
     const ip = getClientIp(req);
     if (!checkRateLimit(ip)) {
       return NextResponse.json(
-        {
-          error:
-            "Too many submissions from your IP. Please try again in 10 minutes.",
-        },
+        { error: "Too many submissions from your IP. Please try again in 10 minutes." },
         { status: 429 },
       );
     }
 
-    // ── Validate that the category exists in /content/ ────────────────
+    // ── Validate category ──
     const { getCategories } = await import("@/lib/content");
     const categories = getCategories();
     const category = categories.find((c) => c.slug === parsed.categorySlug);
     if (!category) {
       return NextResponse.json(
-        {
-          error: "Validation failed",
-          details: [
-            {
-              path: "categorySlug",
-              message: `Category '${parsed.categorySlug}' does not exist`,
-            },
-          ],
-        },
+        { error: "Validation failed", details: [{ path: "categorySlug", message: `Category '${parsed.categorySlug}' does not exist` }] },
         { status: 400 },
       );
     }
 
-    // ── Validate tag slugs ────────────────────────────────────────────
+    // ── Validate tag slugs ──
     const { getTags } = await import("@/lib/content");
     const tags = getTags();
-    const unknownTags = (parsed.tagSlugs ?? []).filter(
-      (slug) => !tags.some((t) => t.slug === slug),
-    );
+    const unknownTags = (parsed.tagSlugs ?? []).filter((slug) => !tags.some((t) => t.slug === slug));
     if (unknownTags.length > 0) {
       return NextResponse.json(
-        {
-          error: "Validation failed",
-          details: [
-            {
-              path: "tagSlugs",
-              message: `Unknown tag slug(s): ${unknownTags.join(", ")}`,
-            },
-          ],
-        },
+        { error: "Validation failed", details: [{ path: "tagSlugs", message: `Unknown tag slug(s): ${unknownTags.join(", ")}` }] },
         { status: 400 },
       );
     }
 
-    // ── Send Telegram notification ────────────────────────────────────
-    // Async — don't block the response. If it fails, user still gets 201.
+    // ── Send Telegram notification ──
     const telegramResult = await sendTelegramNotification({
       title: parsed.title,
       summary: parsed.summary,
@@ -294,15 +266,10 @@ export async function POST(req: Request): Promise<Response> {
       console.warn("[POST /api/patterns] Telegram notification not sent:", telegramResult.error);
     }
 
-    // Always return 201 — user sees success even if Telegram not configured
-    // (security: don't reveal whether the notification backend is set up)
     return NextResponse.json(
       {
         id: `submission_${Date.now()}`,
-        slug: parsed.title
-          .toLowerCase()
-          .replace(/[^a-z0-9]+/g, "-")
-          .replace(/^-+|-+$/g, ""),
+        slug: parsed.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, ""),
         title: parsed.title,
         summary: parsed.summary,
         description: parsed.description,
@@ -317,13 +284,7 @@ export async function POST(req: Request): Promise<Response> {
         severity: parsed.severity,
         authorName: parsed.authorName,
         createdAt: new Date().toISOString(),
-        category: {
-          id: `cat_${category.slug}`,
-          slug: category.slug,
-          name: category.name,
-          icon: category.icon,
-          accent: category.accent,
-        },
+        category: { id: `cat_${category.slug}`, slug: category.slug, name: category.name, icon: category.icon, accent: category.accent },
         tags: (parsed.tagSlugs ?? []).map((slug) => {
           const t = tags.find((x) => x.slug === slug);
           return { id: `tag_${slug}`, slug, name: t?.name ?? slug };
@@ -333,9 +294,6 @@ export async function POST(req: Request): Promise<Response> {
     );
   } catch (err) {
     console.error("[POST /api/patterns] failed:", err);
-    return NextResponse.json(
-      { error: "Failed to create pattern" },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: "Failed to create pattern" }, { status: 500 });
   }
 }

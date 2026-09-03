@@ -1,15 +1,16 @@
 import { NextResponse } from "next/server";
-import { getCategoriesDTO } from "@/lib/content";
+import { getCategoriesDTO, type Locale } from "@/lib/content";
 
-// GET /api/categories
+// GET /api/categories?locale=ru|en
 // Returns all categories ordered by `order`, each with the count of
-// published + approved patterns. Reads directly from /content/ Markdown files —
-// no database needed, works on serverless (Vercel).
-export const dynamic = "force-static";
-
-export async function GET(): Promise<Response> {
+// published + approved patterns. Reads directly from /content/ Markdown files.
+// Locale param translates category names + descriptions.
+export async function GET(req: Request): Promise<Response> {
   try {
-    return NextResponse.json(getCategoriesDTO());
+    const url = new URL(req.url);
+    const localeParam = url.searchParams.get("locale") as Locale | null;
+    const locale: Locale = localeParam === "en" ? "en" : "ru";
+    return NextResponse.json(getCategoriesDTO(locale));
   } catch (err) {
     console.error("[GET /api/categories] failed:", err);
     return NextResponse.json(

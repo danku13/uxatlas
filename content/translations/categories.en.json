@@ -1,0 +1,12 @@
+{
+  "onboarding": { "name": "Onboarding & first launch", "description": "Where users don't understand the value and leave before activation." },
+  "authentication": { "name": "Sign up & authentication", "description": "Where complex forms, passwords and frustration kill conversion." },
+  "search-discovery": { "name": "Search & discovery", "description": "Where users can't find what they're looking for and close the app." },
+  "forms-input": { "name": "Forms & data input", "description": "Where validation, masks and long fields cause frustration." },
+  "checkout-payment": { "name": "Checkout & payment", "description": "Where carts are abandoned due to unexpected steps and card errors." },
+  "errors-recovery": { "name": "Errors & recovery", "description": "Where \"it broke\" — and users don't know what to do next." },
+  "empty-states": { "name": "Empty states", "description": "Where \"it's empty here\" — and users think the app is broken." },
+  "loading-waiting": { "name": "Loading & waiting", "description": "Where long loading feels like \"frozen\" — and users leave." },
+  "notifications-feedback": { "name": "Notifications & feedback", "description": "Where notification spam leads to push opt-out or app uninstall." },
+  "settings-permissions": { "name": "Settings & permissions", "description": "Where complex settings and unclear permissions scare users." }
+}

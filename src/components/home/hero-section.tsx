@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { ArrowRight, Sparkles } from 'lucide-react';
-import { getTranslations } from 'next-intl/server';
+import { getTranslations, getLocale } from 'next-intl/server';
 
 import { Button } from '@/components/ui/button';
 
@@ -39,6 +39,7 @@ function PhonePlaceholder({
 
 export async function HeroSection() {
   const t = await getTranslations('Hero');
+  const locale = await getLocale();
 
   // Read counts directly from /content/ Markdown files — no DB, no fetch.
   // Works on Vercel, serverless, anywhere.
@@ -47,8 +48,8 @@ export async function HeroSection() {
   let guidelineCount = 60;
   try {
     const { getPatterns, getCategories } = await import("@/lib/content");
-    const patterns = getPatterns();
-    const categories = getCategories();
+    const patterns = getPatterns(locale as 'ru' | 'en');
+    const categories = getCategories(locale as 'ru' | 'en');
     patternCount = patterns.length;
     categoryCount = categories.length;
     // Approx guidelines: ~2 per pattern on average → round up
