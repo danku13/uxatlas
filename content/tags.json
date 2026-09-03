@@ -1,0 +1,42 @@
+[
+  {
+    "slug": "android",
+    "name": "Android"
+  },
+  {
+    "slug": "complexity",
+    "name": "Complexity"
+  },
+  {
+    "slug": "cross-platform",
+    "name": "Cross-platform"
+  },
+  {
+    "slug": "error-prone",
+    "name": "Error-prone"
+  },
+  {
+    "slug": "friction-reduction",
+    "name": "Friction reduction"
+  },
+  {
+    "slug": "high-dropoff",
+    "name": "High drop-off risk"
+  },
+  {
+    "slug": "clarity",
+    "name": "Lack of clarity"
+  },
+  {
+    "slug": "optimistic-ui",
+    "name": "Optimistic UI"
+  },
+  {
+    "slug": "progressive-disclosure",
+    "name": "Progressive disclosure"
+  },
+  {
+    "slug": "ios",
+    "name": "iOS"
+  }
+]

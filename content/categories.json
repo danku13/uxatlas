@@ -1,0 +1,82 @@
+[
+  {
+    "slug": "onboarding",
+    "name": "Онбординг и первый запуск",
+    "description": "Где пользователи не понимают ценность и уходят до активации.",
+    "icon": "DoorOpen",
+    "accent": "amber",
+    "order": 1
+  },
+  {
+    "slug": "authentication",
+    "name": "Регистрация и авторизация",
+    "description": "Где сложные формы, пароли и FRUSTration убивают конверсию.",
+    "icon": "Fingerprint",
+    "accent": "rose",
+    "order": 2
+  },
+  {
+    "slug": "search-discovery",
+    "name": "Поиск и обнаружение",
+    "description": "Где пользователь не находит то, что искал, и закрывает приложение.",
+    "icon": "Search",
+    "accent": "emerald",
+    "order": 3
+  },
+  {
+    "slug": "forms-input",
+    "name": "Формы и ввод данных",
+    "description": "Где валидация, маски и длинные поля вызывают фрустрацию.",
+    "icon": "ClipboardList",
+    "accent": "teal",
+    "order": 4
+  },
+  {
+    "slug": "checkout-payment",
+    "name": "Оплата и checkout",
+    "description": "Где корзина брошена из-за неожиданных шагов и ошибок карты.",
+    "icon": "CreditCard",
+    "accent": "orange",
+    "order": 5
+  },
+  {
+    "slug": "errors-recovery",
+    "name": "Ошибки и восстановление",
+    "description": "Где «оно сломалось» — и пользователь не знает, что делать дальше.",
+    "icon": "AlertTriangle",
+    "accent": "red",
+    "order": 6
+  },
+  {
+    "slug": "empty-states",
+    "name": "Empty states",
+    "description": "Где «тут пусто» — и пользователь думает, что приложение не работает.",
+    "icon": "Inbox",
+    "accent": "violet",
+    "order": 7
+  },
+  {
+    "slug": "loading-waiting",
+    "name": "Загрузка и ожидание",
+    "description": "Где долгая загрузка воспринимается как «зависло» — и пользователь уходит.",
+    "icon": "LoaderCircle",
+    "accent": "sky",
+    "order": 8
+  },
+  {
+    "slug": "notifications-feedback",
+    "name": "Уведомления и обратная связь",
+    "description": "Где спам уведомлений приводит к отключению push или удалению приложения.",
+    "icon": "Bell",
+    "accent": "pink",
+    "order": 9
+  },
+  {
+    "slug": "settings-permissions",
+    "name": "Настройки и разрешения",
+    "description": "Где сложные настройки и непонятные разрешения пугают пользователя.",
+    "icon": "Settings",
+    "accent": "slate",
+    "order": 10
+  }
+]
