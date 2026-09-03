@@ -14,7 +14,7 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-md supports-[backdrop-filter]:bg-background/60">
-      <div className="mx-auto flex h-16 w-full max-w-7xl items-center gap-3 px-4 sm:px-6 lg:px-8">
+      <div className="container-px flex h-16 items-center gap-2 sm:gap-3">
         {/* Logo / wordmark */}
         <Link
           href="/"
@@ -28,14 +28,14 @@ export function SiteHeader() {
           </span>
         </Link>
 
-        {/* Desktop search (sm+) */}
-        <div className="relative ml-2 hidden flex-1 items-center md:flex">
+        {/* Desktop search (md+) — flex-1 to fill available width */}
+        <div className="relative ml-1 hidden flex-1 items-center md:flex sm:ml-2">
           <Search className="pointer-events-none absolute left-3 size-4 text-muted-foreground" />
           <Input
             type="search"
             placeholder="Search patterns, e.g. empty state..."
             aria-label="Search patterns"
-            className="h-9 max-w-md pl-9 bg-muted/40"
+            className="h-9 w-full max-w-md pl-9 bg-muted/40"
           />
         </div>
 
@@ -52,7 +52,8 @@ export function SiteHeader() {
             className="hidden bg-emerald-600 text-white shadow-sm hover:bg-emerald-700 dark:bg-emerald-600 dark:hover:bg-emerald-500 sm:inline-flex"
           >
             <Plus className="size-4" />
-            Подать паттерн
+            <span className="hidden md:inline">Подать паттерн</span>
+            <span className="md:hidden">Паттерн</span>
           </Button>
           <Button
             type="button"
@@ -74,7 +75,7 @@ export function SiteHeader() {
             type="search"
             placeholder="Search patterns, e.g. empty state..."
             aria-label="Search patterns"
-            className="h-9 pl-9 bg-muted/40"
+            className="h-9 w-full pl-9 bg-muted/40"
           />
         </div>
       </div>

@@ -32,7 +32,7 @@ export async function PatternCatalogSection() {
       className="scroll-mt-20 border-b"
       aria-labelledby="patterns-heading"
     >
-      <div className="mx-auto w-full max-w-7xl px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
+      <div className="container-wide py-14 lg:py-20">
         <div className="max-w-2xl">
           <p className="text-xs font-semibold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
             Каталог

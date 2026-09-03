@@ -80,7 +80,7 @@ export async function HeroSection() {
         }}
       />
 
-      <div className="mx-auto w-full max-w-7xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-28">
+      <div className="container-px py-16 sm:py-20 lg:py-28">
         <div className="grid items-center gap-12 lg:grid-cols-12">
           {/* Text column */}
           <div className="lg:col-span-7">

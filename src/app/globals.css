@@ -126,6 +126,30 @@
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    /* Prevent horizontal scroll on mobile — content should always fit */
+    overflow-x: hidden;
+  }
+  /* Root font: fluid scaling from mobile to desktop */
+  /* Mobile: 16px, Desktop: 18px — gradual growth */
+  html {
+    font-size: clamp(15px, 0.7vw + 13px, 18px);
+  }
+  /* Clamp body width — prevent extreme widths on ultrawide monitors.
+     On large screens (≥1600px), allow body to grow to 100vw minus padding.
+     On ultrawide (≥2560px), cap at 1800px so content stays readable.
+  */
+  @media (min-width: 1600px) {
+    body {
+      max-width: 100vw;
+      margin: 0 auto;
+    }
+  }
+  @media (min-width: 2560px) {
+    body {
+      max-width: 1800px;
+      margin: 0 auto;
+      box-shadow: 0 0 80px rgba(0, 0, 0, 0.03);
+    }
   }
 }
 
@@ -197,4 +221,99 @@
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+/* ---------------------------------------------------------------------------
+ * Container — fluid adaptive width with consistent padding
+ * Usage: <div className="container-px">...</div>
+ *
+ * On mobile: 1rem padding, no max width
+ * On sm+:   1.5rem padding, still no max
+ * On lg+:   2rem padding, max-width 80rem (1280px)
+ * On xl+:   max-width 90rem (1440px) — wider for catalog grid
+ * On 2xl+:  max-width 96rem (1536px) — full catalog width
+ * ------------------------------------------------------------------------- */
+@utility container-px {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+@media (min-width: 640px) {
+  .container-px {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+@media (min-width: 1024px) {
+  .container-px {
+    padding-left: 2rem;
+    padding-right: 2rem;
+    max-width: 80rem;
+  }
+}
+@media (min-width: 1280px) {
+  .container-px {
+    max-width: 90rem;
+  }
+}
+@media (min-width: 1536px) {
+  .container-px {
+    max-width: 100rem;
+  }
+}
+@media (min-width: 1920px) {
+  .container-px {
+    max-width: 108rem;
+  }
+}
+
+/* Wide container variant — for catalog with sidebar (needs more width) */
+@utility container-wide {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+@media (min-width: 640px) {
+  .container-wide {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+@media (min-width: 1024px) {
+  .container-wide {
+    padding-left: 2rem;
+    padding-right: 2rem;
+    max-width: 90rem;
+  }
+}
+@media (min-width: 1280px) {
+  .container-wide {
+    max-width: 100rem;
+  }
+}
+@media (min-width: 1536px) {
+  .container-wide {
+    max-width: 108rem;
+  }
+}
+@media (min-width: 1920px) {
+  .container-wide {
+    max-width: 116rem;
+  }
+}
+
+/* Prevent horizontal overflow from any element */
+@utility overflow-x-safe {
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Equal-height grid rows — all items in the same row have the same height */
+@utility auto-rows-fr {
+  grid-auto-rows: 1fr;
 }

@@ -253,7 +253,7 @@ export function PatternCatalogClient() {
     <div className="flex flex-col gap-5">
       {/* Top toolbar: search + sort + (mobile) filter button */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-        <div className="relative flex-1">
+        <div className="relative flex-1 min-w-0">
           <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             type="search"
@@ -261,7 +261,7 @@ export function PatternCatalogClient() {
             onChange={(e) => setSearchInput(e.target.value)}
             placeholder="Поиск паттернов…"
             aria-label="Поиск паттернов"
-            className="h-10 pl-9 pr-9"
+            className="h-10 w-full pl-9 pr-9"
           />
           {searchInput ? (
             <button
@@ -278,7 +278,7 @@ export function PatternCatalogClient() {
           ) : null}
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 shrink-0">
           <Select
             value={filters.sort}
             onValueChange={(v) =>
@@ -289,7 +289,7 @@ export function PatternCatalogClient() {
               }))
             }
           >
-            <SelectTrigger className="h-10 w-[180px]" aria-label="Сортировка">
+            <SelectTrigger className="h-10 w-[140px] sm:w-[180px]" aria-label="Сортировка">
               <SelectValue placeholder="Сортировка" />
             </SelectTrigger>
             <SelectContent>
@@ -319,7 +319,7 @@ export function PatternCatalogClient() {
       </div>
 
       {/* Layout: sidebar + grid on desktop; grid only on mobile */}
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[260px_1fr]">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[240px_1fr] xl:grid-cols-[260px_1fr]">
         {/* Desktop sidebar */}
         <aside className="hidden lg:block">
           <div className="sticky top-20 rounded-xl border bg-card/40 p-3">
@@ -334,7 +334,7 @@ export function PatternCatalogClient() {
         </aside>
 
         {/* Grid */}
-        <div className="flex flex-col gap-5">
+        <div className="flex flex-col gap-5 min-w-0">
           {/* Active filter chips */}
           {isFiltersActive(filters) ? (
             <ActiveFiltersBar
@@ -371,7 +371,7 @@ export function PatternCatalogClient() {
             </div>
           ) : (
             <div
-              className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3"
+              className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 auto-rows-fr"
               aria-busy={isFetching ? 'true' : 'false'}
             >
               {showSkeletons
@@ -385,7 +385,7 @@ export function PatternCatalogClient() {
           {/* Pagination */}
           {total > 0 ? (
             <div className="mt-2 flex flex-col items-center justify-between gap-3 border-t pt-4 sm:flex-row">
-              <p className="text-xs text-muted-foreground">
+              <p className="text-xs text-muted-foreground text-center sm:text-left">
                 Показано{' '}
                 <span className="font-medium text-foreground">{rangeStart}</span>
                 {' – '}
@@ -395,7 +395,7 @@ export function PatternCatalogClient() {
               </p>
 
               {totalPages > 1 ? (
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-1 flex-wrap justify-center">
                   <Button
                     type="button"
                     variant="ghost"
@@ -453,7 +453,7 @@ export function PatternCatalogClient() {
 
       {/* Mobile filter Sheet (slides from left) */}
       <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
-        <SheetContent side="left" className="w-[88%] max-w-sm p-0">
+        <SheetContent side="left" className="w-[88%] max-w-sm p-0 overflow-y-auto">
           <SheetHeader className="px-4 pt-4">
             <SheetTitle className="flex items-center gap-2">
               <SlidersHorizontal className="size-4 text-emerald-600 dark:text-emerald-400" />
@@ -472,7 +472,7 @@ export function PatternCatalogClient() {
               tags={tags}
             />
           </div>
-          <div className="border-t p-3">
+          <div className="sticky bottom-0 border-t bg-background p-3">
             <Button
               type="button"
               className="w-full"
