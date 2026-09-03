@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
 import {
   AlertTriangle,
   Check,
@@ -112,6 +113,7 @@ export function PatternDetailDialog({
   onOpenChange: (v: boolean) => void;
 }) {
   const { toast } = useToast();
+  const t = useTranslations('PatternDetail');
   const cat = pattern.category;
   const iconName = cat?.icon ?? 'Circle';
 
@@ -146,7 +148,7 @@ export function PatternDetailDialog({
         {/* Hidden accessible title/description */}
         <DialogTitle className="sr-only">{pattern.title}</DialogTitle>
         <DialogDescription id="pattern-detail-desc" className="sr-only">
-          Подробное описание паттерна с интерактивным демо и гайдлайнами.
+          {t('demoHint')}
         </DialogDescription>
 
         <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] md:max-h-[92vh]">
@@ -154,10 +156,10 @@ export function PatternDetailDialog({
           <div className="flex flex-col items-center gap-4 border-b bg-muted/30 p-6 md:border-b-0 md:border-r">
             <div className="w-full text-center md:text-left">
               <p className="text-xs font-semibold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
-                Интерактивное демо
+                {t('interactiveDemo')}
               </p>
               <p className="mt-1 text-xs text-muted-foreground">
-                Нажмите на элементы — паттерн реально работает
+                {t('demoHint')}
               </p>
             </div>
 
@@ -205,10 +207,10 @@ export function PatternDetailDialog({
                 variant="ghost"
                 size="sm"
                 className="shrink-0 text-muted-foreground"
-                onClick={() => toast({ title: 'Скоро', description: 'Поделиться скоро будет доступно.' })}
+                onClick={() => toast({ title: t('shareToast'), description: t('shareToastDesc') })}
               >
                 <Share2 className="size-4" />
-                <span className="hidden sm:inline">Поделиться</span>
+                <span className="hidden sm:inline">{t('share')}</span>
               </Button>
             </div>
 
@@ -241,7 +243,7 @@ export function PatternDetailDialog({
               <section className="flex flex-col gap-2">
                 <SectionHeading
                   icon={<AlertTriangle className="size-4 text-red-500" />}
-                  title="Проблема"
+                  title={t('problem')}
                 />
                 <div className="rounded-lg border border-red-500/20 bg-red-500/5 p-4 text-sm leading-relaxed text-foreground dark:bg-red-500/10">
                   {pattern.problemStatement}
@@ -252,7 +254,7 @@ export function PatternDetailDialog({
               <section className="flex flex-col gap-2">
                 <SectionHeading
                   icon={<Lightbulb className="size-4 text-emerald-500" />}
-                  title="Решение"
+                  title={t('solution')}
                 />
                 <div className="rounded-lg border border-emerald-500/20 bg-emerald-500/5 p-4 text-sm leading-relaxed text-foreground dark:bg-emerald-500/10">
                   {pattern.solution}
@@ -264,7 +266,7 @@ export function PatternDetailDialog({
                 <section className="flex flex-col gap-2">
                   <SectionHeading
                     icon={<CircleCheck className="size-4 text-emerald-500" />}
-                    title="Плюсы"
+                    title={t('pros')}
                   />
                   <ul className="flex flex-col gap-1.5">
                     {pros.map((p, i) => (
@@ -285,7 +287,7 @@ export function PatternDetailDialog({
                 <section className="flex flex-col gap-2">
                   <SectionHeading
                     icon={<CircleX className="size-4 text-red-500" />}
-                    title="Минусы"
+                    title={t('cons')}
                   />
                   <ul className="flex flex-col gap-1.5">
                     {cons.map((c, i) => (
@@ -306,7 +308,7 @@ export function PatternDetailDialog({
                 <section className="flex flex-col gap-2">
                   <SectionHeading
                     icon={<Sparkles className="size-4 text-amber-500" />}
-                    title="Когда использовать"
+                    title={t('whenToUse')}
                   />
                   <ul className="flex flex-col gap-1.5">
                     {useCases.map((u, i) => (
@@ -326,7 +328,7 @@ export function PatternDetailDialog({
               <section className="flex flex-col gap-2">
                 <SectionHeading
                   icon={<BookOpen className="size-4 text-teal-500" />}
-                  title="Принципы и гайдлайны"
+                  title={t('guidelines')}
                 />
                 {detailLoading ? (
                   <div className="flex flex-col gap-2">
@@ -339,7 +341,7 @@ export function PatternDetailDialog({
                   </div>
                 ) : guidelines.length === 0 ? (
                   <p className="text-sm text-muted-foreground">
-                    Пока нет гайдлайнов.
+                    {t('noGuidelines')}
                   </p>
                 ) : (
                   <div className="flex flex-col gap-2">
@@ -377,7 +379,7 @@ export function PatternDetailDialog({
                 <section className="flex flex-col gap-2">
                   <SectionHeading
                     icon={<Sparkles className="size-4 text-teal-500" />}
-                    title="Теги"
+                    title={t('tags')}
                   />
                   <div className="flex flex-wrap gap-1.5">
                     {pattern.tags.map((t) => (

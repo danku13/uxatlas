@@ -1,0 +1,178 @@
+{
+  "Header": {
+    "searchPlaceholder": "Поиск паттернов, например: empty state...",
+    "searchAriaLabel": "Поиск паттернов",
+    "submitPattern": "Подать паттерн",
+    "submitPatternShort": "Паттерн"
+  },
+  "Nav": {
+    "home": "Главная",
+    "catalog": "Каталог",
+    "about": "О проекте"
+  },
+  "Theme": {
+    "toggleToDark": "Переключить на тёмную тему",
+    "toggleToLight": "Переключить на светлую тему"
+  },
+  "Language": {
+    "toggle": "Сменить язык",
+    "ru": "Русский",
+    "en": "English"
+  },
+  "Hero": {
+    "badge": "Variant A — problem-first atlas",
+    "title": "Где пользователи уходят.",
+    "titleHighlight": "Как их вернуть.",
+    "subtitle": "Каталог мобильных UX-паттернов, сгруппированных по точкам оттока. Каждый паттерн включает интерактивное демо, гайдлайны (Material, HIG, Nielsen) и когда использовать.",
+    "browsePatterns": "Смотреть паттерны",
+    "submitPattern": "Подать паттерн",
+    "statsDropoffPoints": "Точек оттока",
+    "statsPatterns": "Паттернов",
+    "statsGuidelines": "Гайдлайнов"
+  },
+  "Categories": {
+    "badge": "По точкам оттока",
+    "title": "Где уходят пользователи — и паттерны, которые их возвращают",
+    "subtitle": "Каждая категория соответствует точке оттока в пользовательском пути: от первого запуска до настроек и разрешений.",
+    "patternsCount": "{count} паттерн | {count} паттерна | {count} паттернов"
+  },
+  "Catalog": {
+    "badge": "Каталог",
+    "title": "Каталог паттернов",
+    "subtitle": "{count} интерактивных демо — где пользователи отваливаются и как это исправить.",
+    "searchPlaceholder": "Поиск паттернов…",
+    "searchAriaLabel": "Поиск паттернов",
+    "clearSearch": "Очистить поиск",
+    "sortLabel": "Сортировка",
+    "sortNewest": "Новинки",
+    "sortSeverity": "По критичности",
+    "filtersButton": "Фильтры",
+    "filtersTitle": "Фильтры",
+    "filtersDescription": "Выберите категорию, критичность, платформу или тег.",
+    "showPatterns": "Показать {count} паттерн | Показать {count} паттерна | Показать {count} паттернов",
+    "showing": "Показано",
+    "of": "из",
+    "prevPage": "Предыдущая страница",
+    "nextPage": "Следующая страница",
+    "prev": "Назад",
+    "next": "Дальше",
+    "resetFilters": "Сбросить фильтры",
+    "resetAll": "Сбросить всё",
+    "emptyTitle": "Ничего не найдено по фильтрам",
+    "emptyBody": "Попробуйте изменить запрос или сбросить фильтры, чтобы увидеть все паттерны.",
+    "errorTitle": "Не удалось загрузить паттерны",
+    "errorBody": "Попробуйте обновить страницу.",
+    "categories": "Категории",
+    "severity": "Критичность",
+    "severityHigh": "Высокая",
+    "severityMedium": "Средняя",
+    "severityLow": "Низкая",
+    "platform": "Платформа",
+    "platformAll": "Все",
+    "platformIos": "iOS",
+    "platformAndroid": "Android",
+    "tags": "Теги"
+  },
+  "PatternDetail": {
+    "interactiveDemo": "Интерактивное демо",
+    "demoHint": "Нажмите на элементы — паттерн реально работает",
+    "problem": "Проблема",
+    "solution": "Решение",
+    "pros": "Плюсы",
+    "cons": "Минусы",
+    "whenToUse": "Когда использовать",
+    "guidelines": "Принципы и гайдлайны",
+    "tags": "Теги",
+    "share": "Поделиться",
+    "shareToast": "Скоро",
+    "shareToastDesc": "Поделиться скоро будет доступно.",
+    "noGuidelines": "Пока нет гайдлайнов."
+  },
+  "Severity": {
+    "high": "Высокий риск",
+    "medium": "Средний риск",
+    "low": "Низкий риск"
+  },
+  "Submit": {
+    "title": "Подать новый UX-паттерн",
+    "description": "Поделитесь паттерном с сообществом. После модерации он появится в каталоге.",
+    "step": "Шаг {current} из {total}",
+    "basics": "Основы",
+    "problemSolution": "Проблема и решение",
+    "descriptionMockup": "Описание и мокап",
+    "extras": "Дополнительно",
+    "review": "Проверка",
+    "next": "Далее",
+    "back": "Назад",
+    "submit": "Отправить на модерацию",
+    "successTitle": "Заявка отправлена!",
+    "successBody": "Спасибо за вклад. Мы рассмотрим паттерн и свяжемся при необходимости.",
+    "done": "Готово",
+    "fieldName": "Название паттерна",
+    "fieldSummary": "Краткое описание",
+    "fieldCategory": "Категория",
+    "fieldCategoryPlaceholder": "Выберите категорию",
+    "fieldSeverity": "Критичность",
+    "fieldAuthor": "Имя автора",
+    "fieldProblem": "Описание проблемы",
+    "fieldSolution": "Решение",
+    "fieldDescription": "Подробное описание",
+    "fieldMockupType": "Тип мокапа",
+    "fieldMockupTypePlaceholder": "Выберите тип мокапа",
+    "fieldMockupConfig": "Конфигурация мокапа (JSON)",
+    "fieldPlatforms": "Платформы",
+    "fieldPros": "Плюсы",
+    "fieldCons": "Минусы",
+    "fieldUseCases": "Когда использовать",
+    "fieldTags": "Теги",
+    "fieldGuidelines": "Гайдлайны",
+    "addPros": "Добавить плюс",
+    "addCons": "Добавить минус",
+    "addUseCase": "Добавить use case",
+    "addGuideline": "Добавить гайдлайн",
+    "livePreview": "Живое превью",
+    "invalidJson": "Неверный JSON",
+    "validationError": "Ошибка валидации",
+    "submitError": "Не удалось отправить. Попробуйте позже."
+  },
+  "Footer": {
+    "about": "О проекте",
+    "resources": "Ресурсы",
+    "legal": "Правовое",
+    "aboutLinks": {
+      "about": "Про проект",
+      "howToRead": "Как читать паттерны",
+      "categories": "Категории оттока",
+      "contacts": "Контакты"
+    },
+    "resourcesLinks": {
+      "material": "Material Guidelines",
+      "hig": "Apple HIG",
+      "nielsen": "Nielsen heuristics",
+      "glossary": "Глоссарий"
+    },
+    "legalLinks": {
+      "terms": "Условия использования",
+      "privacy": "Конфиденциальность",
+      "license": "Лицензия контента"
+    },
+    "description": "Атлас мобильных UX-паттернов, сгруппированных по точкам оттока пользователей. Сделано для продуктовых команд.",
+    "copyright": "© 2025 UX Atlas · Curated for PMs & UX designers",
+    "developedBy": "Сервис разработал",
+    "authorName": "Даниил Кузьмичёв"
+  },
+  "Common": {
+    "loading": "Загрузка…",
+    "close": "Закрыть",
+    "cancel": "Отмена",
+    "save": "Сохранить",
+    "apply": "Применить",
+    "reset": "Сбросить",
+    "yes": "Да",
+    "no": "Нет"
+  },
+  "Metadata": {
+    "title": "UX Atlas — каталог мобильных UX-паттернов",
+    "description": "Каталог мобильных UX-паттернов для продукт-менеджеров и UX-дизайнеров. Паттерны сгруппированы по точкам оттока пользователей: онбординг, авторизация, поиск, формы, оплата, ошибки, empty states, загрузка, уведомления и настройки."
+  }
+}

@@ -199,6 +199,9 @@ const guidelinesItemSchema = z.object({
 });
 
 const formSchema = z.object({
+  // Honeypot — visually hidden field that bots fill in automatically.
+  // If non-empty on submit, the request is silently rejected server-side.
+  website: z.string().optional(),
   // Step 1 — Basics
   title: z
     .string()
@@ -275,6 +278,7 @@ const DEFAULT_MOCKUP_CONFIG = `{
 }`;
 
 const DEFAULT_VALUES: FormValues = {
+  website: '',
   title: '',
   summary: '',
   categorySlug: '',
@@ -436,6 +440,17 @@ export function SubmitPatternDialog({
             className="flex min-h-0 flex-1 flex-col"
             noValidate
           >
+            {/* Honeypot — visually hidden, but accessible to bots. Don't remove. */}
+            <div aria-hidden className="absolute -left-[9999px] top-auto h-px w-px overflow-hidden">
+              <label htmlFor="website">Website (leave empty)</label>
+              <input
+                id="website"
+                type="text"
+                tabIndex={-1}
+                autoComplete="off"
+                {...form.register('website')}
+              />
+            </div>
             <Header step={step} />
 
             <div className="min-h-0 flex-1 overflow-y-auto px-5 py-5 sm:px-7">

@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { ArrowRight, Sparkles } from 'lucide-react';
+import { getTranslations } from 'next-intl/server';
 
 import { Button } from '@/components/ui/button';
 
@@ -37,6 +38,8 @@ function PhonePlaceholder({
 }
 
 export async function HeroSection() {
+  const t = await getTranslations('Hero');
+
   // Read counts directly from /content/ Markdown files — no DB, no fetch.
   // Works on Vercel, serverless, anywhere.
   let patternCount = 31;
@@ -86,26 +89,24 @@ export async function HeroSection() {
           <div className="lg:col-span-7">
             <div className="inline-flex items-center gap-2 rounded-full border bg-background/60 px-3 py-1 text-xs font-medium text-muted-foreground backdrop-blur">
               <Sparkles className="size-3.5 text-emerald-600 dark:text-emerald-400" />
-              <span>Variant A — problem-first atlas</span>
+              <span>{t('badge')}</span>
             </div>
 
             <h1 className="mt-5 text-balance text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
-              Where users drop off.{' '}
+              {t('title')}{' '}
               <span className="bg-gradient-to-r from-emerald-600 via-teal-600 to-amber-600 bg-clip-text text-transparent dark:from-emerald-400 dark:via-teal-400 dark:to-amber-400">
-                How to bring them back.
+                {t('titleHighlight')}
               </span>
             </h1>
 
             <p className="mt-5 max-w-2xl text-pretty text-base text-muted-foreground sm:text-lg">
-              Mobile UX patterns catalog organized by user drop-off points. Each
-              pattern ships with an interactive demo, guidelines (Material, HIG,
-              Nielsen) and when to use it.
+              {t('subtitle')}
             </p>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
               <Button asChild size="lg" className="h-11 px-6">
                 <a href="#patterns">
-                  Browse patterns
+                  {t('browsePatterns')}
                   <ArrowRight className="size-4" />
                 </a>
               </Button>
@@ -115,7 +116,7 @@ export async function HeroSection() {
                 variant="outline"
                 className="h-11 px-6"
               >
-                <a href="#submit">Submit a pattern</a>
+                <a href="#submit">{t('submitPattern')}</a>
               </Button>
             </div>
 
@@ -123,7 +124,7 @@ export async function HeroSection() {
             <dl className="mt-10 grid grid-cols-3 gap-4 sm:max-w-md">
               <div>
                 <dt className="text-xs uppercase tracking-wider text-muted-foreground">
-                  Drop-off points
+                  {t('statsDropoffPoints')}
                 </dt>
                 <dd className="mt-1 text-2xl font-semibold tracking-tight">
                   {categoryCount}
@@ -131,7 +132,7 @@ export async function HeroSection() {
               </div>
               <div>
                 <dt className="text-xs uppercase tracking-wider text-muted-foreground">
-                  Patterns
+                  {t('statsPatterns')}
                 </dt>
                 <dd className="mt-1 text-2xl font-semibold tracking-tight">
                   {patternCount}
@@ -139,7 +140,7 @@ export async function HeroSection() {
               </div>
               <div>
                 <dt className="text-xs uppercase tracking-wider text-muted-foreground">
-                  Guidelines
+                  {t('statsGuidelines')}
                 </dt>
                 <dd className="mt-1 text-2xl font-semibold tracking-tight">
                   {guidelineCount}+

@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
+import { getTranslations } from 'next-intl/server';
 
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
@@ -131,7 +132,13 @@ function CategoryCardSkeleton() {
   );
 }
 
-function CategoryCard({ category }: { category: Category }) {
+function CategoryCard({
+  category,
+  patternsLabel,
+}: {
+  category: Category;
+  patternsLabel: string;
+}) {
   const accent = getAccent(category.accent);
   const iconName = category.icon ?? 'Circle';
   // Deep-link into the catalog: `/?category=<slug>#patterns`. The catalog
@@ -141,7 +148,7 @@ function CategoryCard({ category }: { category: Category }) {
   return (
     <Link
       href={href}
-      aria-label={`${category.name} — ${category.patternCount} паттернов`}
+      aria-label={`${category.name} — ${category.patternCount} ${patternsLabel}`}
       className="group focus:outline-none"
     >
       <Card
@@ -171,7 +178,7 @@ function CategoryCard({ category }: { category: Category }) {
           <div className="mt-1 flex items-center justify-between">
             <Badge variant="secondary" className="font-medium">
               {category.patternCount}{' '}
-              {category.patternCount === 1 ? 'паттерн' : 'паттернов'}
+              {patternsLabel}
             </Badge>
             <ArrowRight
               className="size-4 text-muted-foreground transition-transform group-hover:translate-x-0.5 group-hover:text-foreground"
@@ -184,6 +191,7 @@ function CategoryCard({ category }: { category: Category }) {
 }
 
 export async function CategoriesSection() {
+  const t = await getTranslations('Categories');
   const categories = await fetchCategories();
 
   return (
@@ -192,14 +200,13 @@ export async function CategoriesSection() {
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div className="max-w-2xl">
             <p className="text-xs font-semibold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
-              Browse by drop-off point
+              {t('badge')}
             </p>
             <h2 className="mt-2 text-2xl font-bold tracking-tight sm:text-3xl">
-              Where users leave — and the patterns that bring them back
+              {t('title')}
             </h2>
             <p className="mt-2 text-sm text-muted-foreground sm:text-base">
-              Каждая категория соответствует точке оттока в пользовательском
-              пути: от первого запуска до настроек и разрешений.
+              {t('subtitle')}
             </p>
           </div>
         </div>
@@ -210,7 +217,11 @@ export async function CategoriesSection() {
                 <CategoryCardSkeleton key={i} />
               ))
             : categories.map((c) => (
-                <CategoryCard key={c.id} category={c} />
+                <CategoryCard
+                  key={c.id}
+                  category={c}
+                  patternsLabel={t('patternsCount', { count: c.patternCount })}
+                />
               ))}
         </div>
       </div>

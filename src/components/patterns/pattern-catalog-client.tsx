@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { useQuery, keepPreviousData } from '@tanstack/react-query';
+import { useTranslations } from 'next-intl';
 import { Search, X, SlidersHorizontal, ArrowLeft, ArrowRight } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
@@ -103,6 +104,7 @@ export function PatternCatalogClient() {
   const router = useRouter();
   const pathname = usePathname();
   const sp = useSearchParams();
+  const t = useTranslations('Catalog');
 
   // Hydrate initial filter state from URL params (one-time read).
   const [filters, setFilters] = React.useState<CatalogFilters>(() =>
@@ -259,8 +261,8 @@ export function PatternCatalogClient() {
             type="search"
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
-            placeholder="Поиск паттернов…"
-            aria-label="Поиск паттернов"
+            placeholder={t('searchPlaceholder')}
+            aria-label={t('searchAriaLabel')}
             className="h-10 w-full pl-9 pr-9"
           />
           {searchInput ? (
@@ -270,7 +272,7 @@ export function PatternCatalogClient() {
                 setSearchInput('');
                 setFilters((f) => ({ ...f, q: '', page: 1 }));
               }}
-              aria-label="Очистить поиск"
+              aria-label={t('clearSearch')}
               className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-1 text-muted-foreground hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               <X className="size-4" />
@@ -289,12 +291,12 @@ export function PatternCatalogClient() {
               }))
             }
           >
-            <SelectTrigger className="h-10 w-[140px] sm:w-[180px]" aria-label="Сортировка">
-              <SelectValue placeholder="Сортировка" />
+            <SelectTrigger className="h-10 w-[140px] sm:w-[180px]" aria-label={t('sortLabel')}>
+              <SelectValue placeholder={t('sortLabel')} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="newest">Новинки</SelectItem>
-              <SelectItem value="severity">По критичности</SelectItem>
+              <SelectItem value="newest">{t('sortNewest')}</SelectItem>
+              <SelectItem value="severity">{t('sortSeverity')}</SelectItem>
             </SelectContent>
           </Select>
 
@@ -305,10 +307,10 @@ export function PatternCatalogClient() {
             size="default"
             className="relative h-10 lg:hidden"
             onClick={() => setSheetOpen(true)}
-            aria-label="Открыть фильтры"
+            aria-label={t('filtersButton')}
           >
             <SlidersHorizontal className="size-4" />
-            <span className="hidden sm:inline">Фильтры</span>
+            <span className="hidden sm:inline">{t('filtersButton')}</span>
             {isFiltersActive(filters) ? (
               <span className="absolute -right-1 -top-1 flex size-4 items-center justify-center rounded-full bg-emerald-500 text-[10px] font-bold text-white">
                 ●
@@ -349,10 +351,10 @@ export function PatternCatalogClient() {
           {isError ? (
             <div className="rounded-xl border border-red-500/30 bg-red-500/5 p-6 text-center">
               <p className="text-sm font-medium text-red-700 dark:text-red-300">
-                Не удалось загрузить паттерны
+                {t('errorTitle')}
               </p>
               <p className="mt-1 text-xs text-muted-foreground">
-                Попробуйте обновить страницу.
+                {t('errorBody')}
               </p>
             </div>
           ) : showEmpty ? (
@@ -360,13 +362,12 @@ export function PatternCatalogClient() {
               <div className="flex size-12 items-center justify-center rounded-full bg-muted">
                 <Search className="size-5 text-muted-foreground" />
               </div>
-              <p className="text-base font-semibold">Ничего не найдено по фильтрам</p>
+              <p className="text-base font-semibold">{t('emptyTitle')}</p>
               <p className="max-w-sm text-sm text-muted-foreground">
-                Попробуйте изменить запрос или сбросить фильтры, чтобы увидеть все
-                паттерны.
+                {t('emptyBody')}
               </p>
               <Button type="button" variant="outline" onClick={resetFilters}>
-                Сбросить фильтры
+                {t('resetFilters')}
               </Button>
             </div>
           ) : (
@@ -386,11 +387,11 @@ export function PatternCatalogClient() {
           {total > 0 ? (
             <div className="mt-2 flex flex-col items-center justify-between gap-3 border-t pt-4 sm:flex-row">
               <p className="text-xs text-muted-foreground text-center sm:text-left">
-                Показано{' '}
+                {t('showing')}{' '}
                 <span className="font-medium text-foreground">{rangeStart}</span>
                 {' – '}
                 <span className="font-medium text-foreground">{rangeEnd}</span>
-                {' из '}
+                {' '}{t('of')}{' '}
                 <span className="font-medium text-foreground">{total}</span>
               </p>
 
@@ -402,10 +403,10 @@ export function PatternCatalogClient() {
                     size="sm"
                     disabled={currentPage <= 1}
                     onClick={() => gotoPage(currentPage - 1)}
-                    aria-label="Предыдущая страница"
+                    aria-label={t('prevPage')}
                   >
                     <ArrowLeft className="size-4" />
-                    <span className="hidden sm:inline">Назад</span>
+                    <span className="hidden sm:inline">{t('prev')}</span>
                   </Button>
 
                   <div className="flex items-center gap-1">
@@ -439,9 +440,9 @@ export function PatternCatalogClient() {
                     size="sm"
                     disabled={currentPage >= totalPages}
                     onClick={() => gotoPage(currentPage + 1)}
-                    aria-label="Следующая страница"
+                    aria-label={t('nextPage')}
                   >
-                    <span className="hidden sm:inline">Дальше</span>
+                    <span className="hidden sm:inline">{t('next')}</span>
                     <ArrowRight className="size-4" />
                   </Button>
                 </div>
@@ -457,10 +458,10 @@ export function PatternCatalogClient() {
           <SheetHeader className="px-4 pt-4">
             <SheetTitle className="flex items-center gap-2">
               <SlidersHorizontal className="size-4 text-emerald-600 dark:text-emerald-400" />
-              Фильтры
+              {t('filtersTitle')}
             </SheetTitle>
             <SheetDescription>
-              Выберите категорию, критичность, платформу или тег.
+              {t('filtersDescription')}
             </SheetDescription>
           </SheetHeader>
           <div className="flex-1 overflow-hidden px-2 pb-2">
@@ -478,7 +479,7 @@ export function PatternCatalogClient() {
               className="w-full"
               onClick={() => setSheetOpen(false)}
             >
-              Показать {total} {pluralizePatterns(total)}
+              {t('showPatterns', { count: total })}
             </Button>
           </div>
         </SheetContent>
@@ -592,13 +593,4 @@ function buildPageRange(current: number, total: number): (number | '…')[] {
   if (showRight < total - 1) out.push('…');
   out.push(total);
   return out;
-}
-
-function pluralizePatterns(n: number): string {
-  const lastTwo = n % 100;
-  const last = n % 10;
-  if (lastTwo >= 11 && lastTwo <= 14) return 'паттернов';
-  if (last === 1) return 'паттерн';
-  if (last >= 2 && last <= 4) return 'паттерна';
-  return 'паттернов';
 }

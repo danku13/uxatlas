@@ -1,0 +1,178 @@
+{
+  "Header": {
+    "searchPlaceholder": "Search patterns, e.g. empty state...",
+    "searchAriaLabel": "Search patterns",
+    "submitPattern": "Submit a pattern",
+    "submitPatternShort": "Pattern"
+  },
+  "Nav": {
+    "home": "Home",
+    "catalog": "Catalog",
+    "about": "About"
+  },
+  "Theme": {
+    "toggleToDark": "Switch to dark theme",
+    "toggleToLight": "Switch to light theme"
+  },
+  "Language": {
+    "toggle": "Change language",
+    "ru": "Русский",
+    "en": "English"
+  },
+  "Hero": {
+    "badge": "Variant A — problem-first atlas",
+    "title": "Where users drop off.",
+    "titleHighlight": "How to bring them back.",
+    "subtitle": "Mobile UX patterns catalog organized by user drop-off points. Each pattern ships with an interactive demo, guidelines (Material, HIG, Nielsen) and when to use it.",
+    "browsePatterns": "Browse patterns",
+    "submitPattern": "Submit a pattern",
+    "statsDropoffPoints": "Drop-off points",
+    "statsPatterns": "Patterns",
+    "statsGuidelines": "Guidelines"
+  },
+  "Categories": {
+    "badge": "Browse by drop-off point",
+    "title": "Where users leave — and the patterns that bring them back",
+    "subtitle": "Each category corresponds to a drop-off point in the user journey: from first launch to settings and permissions.",
+    "patternsCount": "{count} pattern | {count} patterns | {count} patterns"
+  },
+  "Catalog": {
+    "badge": "Catalog",
+    "title": "Pattern catalog",
+    "subtitle": "{count} interactive demo — where users drop off and how to fix it.",
+    "searchPlaceholder": "Search patterns…",
+    "searchAriaLabel": "Search patterns",
+    "clearSearch": "Clear search",
+    "sortLabel": "Sort",
+    "sortNewest": "Newest",
+    "sortSeverity": "By severity",
+    "filtersButton": "Filters",
+    "filtersTitle": "Filters",
+    "filtersDescription": "Select a category, severity, platform, or tag.",
+    "showPatterns": "Show {count} pattern | Show {count} patterns | Show {count} patterns",
+    "showing": "Showing",
+    "of": "of",
+    "prevPage": "Previous page",
+    "nextPage": "Next page",
+    "prev": "Back",
+    "next": "Next",
+    "resetFilters": "Reset filters",
+    "resetAll": "Reset all",
+    "emptyTitle": "Nothing found for these filters",
+    "emptyBody": "Try changing your query or reset filters to see all patterns.",
+    "errorTitle": "Failed to load patterns",
+    "errorBody": "Try refreshing the page.",
+    "categories": "Categories",
+    "severity": "Severity",
+    "severityHigh": "High",
+    "severityMedium": "Medium",
+    "severityLow": "Low",
+    "platform": "Platform",
+    "platformAll": "All",
+    "platformIos": "iOS",
+    "platformAndroid": "Android",
+    "tags": "Tags"
+  },
+  "PatternDetail": {
+    "interactiveDemo": "Interactive demo",
+    "demoHint": "Click on elements — the pattern really works",
+    "problem": "Problem",
+    "solution": "Solution",
+    "pros": "Pros",
+    "cons": "Cons",
+    "whenToUse": "When to use",
+    "guidelines": "Principles and guidelines",
+    "tags": "Tags",
+    "share": "Share",
+    "shareToast": "Soon",
+    "shareToastDesc": "Sharing will be available soon.",
+    "noGuidelines": "No guidelines yet."
+  },
+  "Severity": {
+    "high": "High risk",
+    "medium": "Medium risk",
+    "low": "Low risk"
+  },
+  "Submit": {
+    "title": "Submit a new UX pattern",
+    "description": "Share a pattern with the community. After moderation, it will appear in the catalog.",
+    "step": "Step {current} of {total}",
+    "basics": "Basics",
+    "problemSolution": "Problem & Solution",
+    "descriptionMockup": "Description & Mockup",
+    "extras": "Extras",
+    "review": "Review",
+    "next": "Next",
+    "back": "Back",
+    "submit": "Submit for moderation",
+    "successTitle": "Submission sent!",
+    "successBody": "Thank you for your contribution. We'll review the pattern and reach out if needed.",
+    "done": "Done",
+    "fieldName": "Pattern name",
+    "fieldSummary": "Short summary",
+    "fieldCategory": "Category",
+    "fieldCategoryPlaceholder": "Select a category",
+    "fieldSeverity": "Severity",
+    "fieldAuthor": "Author name",
+    "fieldProblem": "Problem statement",
+    "fieldSolution": "Solution",
+    "fieldDescription": "Detailed description",
+    "fieldMockupType": "Mockup type",
+    "fieldMockupTypePlaceholder": "Select a mockup type",
+    "fieldMockupConfig": "Mockup config (JSON)",
+    "fieldPlatforms": "Platforms",
+    "fieldPros": "Pros",
+    "fieldCons": "Cons",
+    "fieldUseCases": "Use cases",
+    "fieldTags": "Tags",
+    "fieldGuidelines": "Guidelines",
+    "addPros": "Add pro",
+    "addCons": "Add con",
+    "addUseCase": "Add use case",
+    "addGuideline": "Add guideline",
+    "livePreview": "Live preview",
+    "invalidJson": "Invalid JSON",
+    "validationError": "Validation error",
+    "submitError": "Failed to submit. Try again later."
+  },
+  "Footer": {
+    "about": "About",
+    "resources": "Resources",
+    "legal": "Legal",
+    "aboutLinks": {
+      "about": "About",
+      "howToRead": "How to read patterns",
+      "categories": "Drop-off categories",
+      "contacts": "Contacts"
+    },
+    "resourcesLinks": {
+      "material": "Material Guidelines",
+      "hig": "Apple HIG",
+      "nielsen": "Nielsen heuristics",
+      "glossary": "Glossary"
+    },
+    "legalLinks": {
+      "terms": "Terms of use",
+      "privacy": "Privacy",
+      "license": "Content license"
+    },
+    "description": "Atlas of mobile UX patterns grouped by user drop-off points. Made for product teams.",
+    "copyright": "© 2025 UX Atlas · Curated for PMs & UX designers",
+    "developedBy": "Built by",
+    "authorName": "Daniel Kuzmichev"
+  },
+  "Common": {
+    "loading": "Loading…",
+    "close": "Close",
+    "cancel": "Cancel",
+    "save": "Save",
+    "apply": "Apply",
+    "reset": "Reset",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "Metadata": {
+    "title": "UX Atlas — Mobile UX Drop-off Atlas",
+    "description": "Catalog of mobile UX patterns for product managers and UX designers. Patterns grouped by user drop-off points: onboarding, auth, search, forms, checkout, errors, empty states, loading, notifications, and settings."
+  }
+}

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { getTranslations } from 'next-intl/server';
 import { PatternCatalogClient } from './pattern-catalog-client';
 
 /**
@@ -14,6 +15,8 @@ import { PatternCatalogClient } from './pattern-catalog-client';
  * accurate as the catalog grows.
  */
 export async function PatternCatalogSection() {
+  const t = await getTranslations('Catalog');
+
   // Read count directly from /content/ Markdown files — no DB, no fetch.
   // Works on Vercel, serverless, anywhere.
   let totalPatterns = 31; // sensible fallback
@@ -35,17 +38,16 @@ export async function PatternCatalogSection() {
       <div className="container-wide py-14 lg:py-20">
         <div className="max-w-2xl">
           <p className="text-xs font-semibold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
-            Каталог
+            {t('badge')}
           </p>
           <h2
             id="patterns-heading"
             className="mt-2 text-2xl font-bold tracking-tight sm:text-3xl"
           >
-            Каталог паттернов
+            {t('title')}
           </h2>
           <p className="mt-2 text-sm text-muted-foreground sm:text-base">
-            {totalPatterns} интерактивных демо — где пользователи отваливаются
-            и как это исправить.
+            {t('subtitle', { count: totalPatterns })}
           </p>
         </div>
 

@@ -1,53 +1,50 @@
 import Link from 'next/link';
 import { Github, Rss, Twitter, Send } from 'lucide-react';
+import { getTranslations } from 'next-intl/server';
 
-const footerNav = [
-  {
-    title: 'About',
-    links: [
-      { label: 'Про проект', href: '#about' },
-      { label: 'Как читать паттерны', href: '#how' },
-      { label: 'Категории оттока', href: '#categories' },
-      { label: 'Контакты', href: '#contacts' },
-    ],
-  },
-  {
-    title: 'Resources',
-    links: [
-      { label: 'Material Guidelines', href: '#material' },
-      { label: 'Apple HIG', href: '#hig' },
-      { label: 'Nielsen heuristics', href: '#nielsen' },
-      { label: 'Глоссарий', href: '#glossary' },
-    ],
-  },
-  {
-    title: 'Legal',
-    links: [
-      { label: 'Условия использования', href: '#terms' },
-      { label: 'Конфиденциальность', href: '#privacy' },
-      { label: 'Лицензия контента', href: '#license' },
-    ],
-  },
-];
+export async function SiteFooter() {
+  const t = await getTranslations('Footer');
 
-export function SiteFooter() {
+  const footerNav = [
+    {
+      title: t('about'),
+      links: [
+        { label: t('aboutLinks.about'), href: '#about' },
+        { label: t('aboutLinks.howToRead'), href: '#how' },
+        { label: t('aboutLinks.categories'), href: '#categories' },
+        { label: t('aboutLinks.contacts'), href: '#contacts' },
+      ],
+    },
+    {
+      title: t('resources'),
+      links: [
+        { label: t('resourcesLinks.material'), href: '#material' },
+        { label: t('resourcesLinks.hig'), href: '#hig' },
+        { label: t('resourcesLinks.nielsen'), href: '#nielsen' },
+        { label: t('resourcesLinks.glossary'), href: '#glossary' },
+      ],
+    },
+    {
+      title: t('legal'),
+      links: [
+        { label: t('legalLinks.terms'), href: '#terms' },
+        { label: t('legalLinks.privacy'), href: '#privacy' },
+        { label: t('legalLinks.license'), href: '#license' },
+      ],
+    },
+  ];
+
   return (
     <footer className="mt-auto border-t bg-background">
       <div className="container-px py-10">
         <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 lg:grid-cols-4">
-          {/* Brand blurb */}
+          {/* Brand blurb — text only, no icon */}
           <div className="col-span-2 sm:col-span-3 lg:col-span-1">
-            <div className="flex items-center gap-2">
-              <span className="flex size-7 items-center justify-center rounded-md bg-emerald-500/10 text-emerald-600 ring-1 ring-inset ring-emerald-500/20 dark:text-emerald-400">
-                <span className="text-xs font-bold">UX</span>
-              </span>
-              <span className="text-sm font-semibold tracking-tight">
-                UX Patterns Atlas
-              </span>
-            </div>
+            <span className="bg-gradient-to-r from-emerald-600 via-teal-600 to-amber-600 bg-clip-text text-base font-bold tracking-tight text-transparent dark:from-emerald-400 dark:via-teal-400 dark:to-amber-400">
+              UX Atlas
+            </span>
             <p className="mt-3 text-sm text-muted-foreground">
-              Атлас мобильных UX-паттернов, сгруппированных по точкам оттока
-              пользователей. Сделано для продуктовых команд.
+              {t('description')}
             </p>
             <div className="mt-4 flex items-center gap-1">
               <Link
@@ -103,11 +100,11 @@ export function SiteFooter() {
         {/* Bottom row */}
         <div className="mt-10 flex flex-col gap-4 border-t pt-6 sm:flex-row sm:items-center sm:justify-between">
           <p className="text-xs text-muted-foreground">
-            © 2025 UX Patterns Atlas · Curated for PMs &amp; UX designers
+            {t('copyright')}
           </p>
           <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
-            <span>Сервис разработал</span>
-            <span className="font-medium text-foreground">Даниил Кузьмичёв</span>
+            <span>{t('developedBy')}</span>
+            <span className="font-medium text-foreground">{t('authorName')}</span>
             <span aria-hidden>·</span>
             <a
               href="https://t.me/danku13"

@@ -2,29 +2,29 @@
 
 import * as React from 'react';
 import Link from 'next/link';
-import { Search, LayoutGrid, Plus } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { Search, Plus } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ThemeToggle } from '@/components/theme-toggle';
+import { LanguageToggle } from '@/components/language-toggle';
 import { SubmitPatternDialog } from '@/components/submit/submit-pattern-dialog';
 
 export function SiteHeader() {
+  const t = useTranslations('Header');
   const [submitOpen, setSubmitOpen] = React.useState(false);
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-md supports-[backdrop-filter]:bg-background/60">
       <div className="container-px flex h-16 items-center gap-2 sm:gap-3">
-        {/* Logo / wordmark */}
+        {/* Logo / wordmark — text only, no icon */}
         <Link
           href="/"
-          className="flex shrink-0 items-center gap-2 rounded-md outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          className="flex shrink-0 items-center rounded-md outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
         >
-          <span className="flex size-8 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-600 ring-1 ring-inset ring-emerald-500/20 dark:text-emerald-400">
-            <LayoutGrid className="size-5" />
-          </span>
-          <span className="text-base font-semibold tracking-tight">
-            UX Patterns
+          <span className="bg-gradient-to-r from-emerald-600 via-teal-600 to-amber-600 bg-clip-text text-base font-bold tracking-tight text-transparent dark:from-emerald-400 dark:via-teal-400 dark:to-amber-400">
+            UX Atlas
           </span>
         </Link>
 
@@ -33,8 +33,8 @@ export function SiteHeader() {
           <Search className="pointer-events-none absolute left-3 size-4 text-muted-foreground" />
           <Input
             type="search"
-            placeholder="Search patterns, e.g. empty state..."
-            aria-label="Search patterns"
+            placeholder={t('searchPlaceholder')}
+            aria-label={t('searchAriaLabel')}
             className="h-9 w-full max-w-md pl-9 bg-muted/40"
           />
         </div>
@@ -44,6 +44,7 @@ export function SiteHeader() {
 
         {/* Right cluster */}
         <div className="flex shrink-0 items-center gap-1.5">
+          <LanguageToggle />
           <ThemeToggle />
           <Button
             type="button"
@@ -52,15 +53,15 @@ export function SiteHeader() {
             className="hidden bg-emerald-600 text-white shadow-sm hover:bg-emerald-700 dark:bg-emerald-600 dark:hover:bg-emerald-500 sm:inline-flex"
           >
             <Plus className="size-4" />
-            <span className="hidden md:inline">Подать паттерн</span>
-            <span className="md:hidden">Паттерн</span>
+            <span className="hidden md:inline">{t('submitPattern')}</span>
+            <span className="md:hidden">{t('submitPatternShort')}</span>
           </Button>
           <Button
             type="button"
             size="icon"
             onClick={() => setSubmitOpen(true)}
             className="bg-emerald-600 text-white shadow-sm hover:bg-emerald-700 dark:bg-emerald-600 dark:hover:bg-emerald-500 sm:hidden"
-            aria-label="Подать паттерн"
+            aria-label={t('submitPattern')}
           >
             <Plus className="size-4" />
           </Button>
@@ -73,8 +74,8 @@ export function SiteHeader() {
           <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             type="search"
-            placeholder="Search patterns, e.g. empty state..."
-            aria-label="Search patterns"
+            placeholder={t('searchPlaceholder')}
+            aria-label={t('searchAriaLabel')}
             className="h-9 w-full pl-9 bg-muted/40"
           />
         </div>

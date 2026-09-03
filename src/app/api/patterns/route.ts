@@ -6,6 +6,7 @@ import {
   type Pattern,
   type Severity,
 } from "@/lib/content";
+import { sendTelegramNotification, checkRateLimit, getClientIp } from "@/lib/telegram";
 import type { Paginated, PatternDTO } from "@/lib/types";
 
 // ---------------------------------------------------------------------------
@@ -153,6 +154,10 @@ const guidelineInputSchema = z.object({
 });
 
 const createPatternSchema = z.object({
+  // Honeypot field — bots fill this in, humans don't (it's visually hidden).
+  // If present and non-empty, the submission is silently rejected (200 returned
+  // so the bot thinks it succeeded, but no notification is sent).
+  website: z.string().optional(),
   title: z.string().trim().min(3).max(100),
   summary: z.string().trim().min(10).max(200),
   description: z.string().trim().min(20).max(2000),
@@ -204,7 +209,29 @@ export async function POST(req: Request): Promise<Response> {
   }
 
   try {
-    // Validate that the category exists in /content/
+    // ── Honeypot check ──────────────────────────────────────────────────
+    // If the hidden "website" field is filled in, this is a bot.
+    // Silently return success so bots don't retry — no Telegram notification.
+    if (parsed.website && parsed.website.trim().length > 0) {
+      return NextResponse.json(
+        { id: "spam_honeypot", slug: "spam", title: parsed.title },
+        { status: 201 },
+      );
+    }
+
+    // ── Rate limit check ──────────────────────────────────────────────
+    const ip = getClientIp(req);
+    if (!checkRateLimit(ip)) {
+      return NextResponse.json(
+        {
+          error:
+            "Too many submissions from your IP. Please try again in 10 minutes.",
+        },
+        { status: 429 },
+      );
+    }
+
+    // ── Validate that the category exists in /content/ ────────────────
     const { getCategories } = await import("@/lib/content");
     const categories = getCategories();
     const category = categories.find((c) => c.slug === parsed.categorySlug);
@@ -223,7 +250,7 @@ export async function POST(req: Request): Promise<Response> {
       );
     }
 
-    // Validate tag slugs
+    // ── Validate tag slugs ────────────────────────────────────────────
     const { getTags } = await import("@/lib/content");
     const tags = getTags();
     const unknownTags = (parsed.tagSlugs ?? []).filter(
@@ -244,23 +271,65 @@ export async function POST(req: Request): Promise<Response> {
       );
     }
 
-    // On serverless without persistent storage, submissions can't be saved.
-    // Return 503 with a clear message. (For production, hook up a real DB or
-    // a service like Formspree/Sentry to capture submissions.)
+    // ── Send Telegram notification ────────────────────────────────────
+    // Async — don't block the response. If it fails, user still gets 201.
+    const telegramResult = await sendTelegramNotification({
+      title: parsed.title,
+      summary: parsed.summary,
+      category: category.name,
+      severity: parsed.severity,
+      author: parsed.authorName,
+      problemStatement: parsed.problemStatement,
+      solution: parsed.solution,
+      description: parsed.description,
+      platforms: parsed.platforms,
+      pros: parsed.pros,
+      cons: parsed.cons,
+      useCases: parsed.useCases,
+      tags: parsed.tagSlugs,
+      guidelines: parsed.guidelines,
+    });
+
+    if (!telegramResult.success) {
+      console.warn("[POST /api/patterns] Telegram notification not sent:", telegramResult.error);
+    }
+
+    // Always return 201 — user sees success even if Telegram not configured
+    // (security: don't reveal whether the notification backend is set up)
     return NextResponse.json(
       {
-        error:
-          "Submissions are not available on this deployment. To enable pattern submissions, configure a database (see README).",
-        received: {
-          title: parsed.title,
-          slug: parsed.title
-            .toLowerCase()
-            .replace(/[^a-z0-9]+/g, "-")
-            .replace(/^-+|-+$/g, ""),
-          category: parsed.categorySlug,
+        id: `submission_${Date.now()}`,
+        slug: parsed.title
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/^-+|-+$/g, ""),
+        title: parsed.title,
+        summary: parsed.summary,
+        description: parsed.description,
+        problemStatement: parsed.problemStatement,
+        solution: parsed.solution,
+        pros: parsed.pros ?? [],
+        cons: parsed.cons ?? [],
+        useCases: parsed.useCases ?? [],
+        mockupType: parsed.mockupType,
+        mockupConfig: parsed.mockupConfig,
+        platforms: parsed.platforms,
+        severity: parsed.severity,
+        authorName: parsed.authorName,
+        createdAt: new Date().toISOString(),
+        category: {
+          id: `cat_${category.slug}`,
+          slug: category.slug,
+          name: category.name,
+          icon: category.icon,
+          accent: category.accent,
         },
+        tags: (parsed.tagSlugs ?? []).map((slug) => {
+          const t = tags.find((x) => x.slug === slug);
+          return { id: `tag_${slug}`, slug, name: t?.name ?? slug };
+        }),
       },
-      { status: 503 },
+      { status: 201 },
     );
   } catch (err) {
     console.error("[POST /api/patterns] failed:", err);
